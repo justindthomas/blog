@@ -1,26 +1,43 @@
 html {
-   padding: 0;
-   margin: 0;
-   background-color: #ffffff;
-   font-family: Verdana, Helvetica, sans-serif;
+    padding: 0;
+    margin: 0;
+    background-color: #ffffff;
+    font-family: Verdana, Helvetica, sans-serif;
 }
 body {
-   padding: 0;
-   margin: 0;
+    padding: 0;
+    margin: 0;
 }
 a {
-   text-decoration: underline;
+    text-decoration: underline;
 }
 a :hover {
-   cursor: pointer;
-   text-decoration: underline;
+    cursor: pointer;
+    text-decoration: underline;
 }
 img {
-   border: none;
+    border: none;
+}
+#header {
+    position: relative;
+    float: left;
+    padding-left: 1em;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 100%;
+    margin: 0;
+    background: #000000;
+    color: #ffffff;
+}
+p {
+    position: relative;
+    float: left;
+    margin: 0;
+    padding: 0;
 }
 #content {
-   padding-left: 1em;
+    padding-left: 1em;
 }
 #info {
-   font-size: 60%;
+    font-size: 60%;
 }
