@@ -21,7 +21,8 @@ Flag old-base
 Executable blog
   hs-source-dirs: src
   main-is: Main.hs
-
+  other-modules: Site, Application
+  
   Build-depends:
     bytestring                >= 0.9.1   && < 0.11,
     heist                     >= 0.14    && < 0.15,
@@ -31,6 +32,8 @@ Executable blog
     snap-core                 >= 0.9     && < 0.10,
     snap-server               >= 0.9     && < 0.10,
     snap-loader-static        >= 0.9     && < 0.10,
+    postgresql-simple,
+    snaplet-postgresql-simple >= 0.6     && < 0.7,
     text                      >= 0.11    && < 1.3,
     time                      >= 1.1     && < 1.6,
     xmlhtml                   >= 0.1     && < 0.3

@@ -11,7 +11,6 @@ module Site
 ------------------------------------------------------------------------------
 import           Control.Applicative
 import           Data.ByteString (ByteString)
-import           Data.Monoid
 import qualified Data.Text as T
 import           Snap.Core
 import           Snap.Snaplet
@@ -20,6 +19,7 @@ import           Snap.Snaplet.Auth.Backends.JsonFile
 import           Snap.Snaplet.Heist
 import           Snap.Snaplet.Session.Backends.CookieSession
 import           Snap.Util.FileServe
+import           Snap.Snaplet.PostgresqlSimple
 import           Heist
 import qualified Heist.Interpreted as I
 ------------------------------------------------------------------------------
@@ -83,7 +83,8 @@ app = makeSnaplet "app" "An snaplet example application." Nothing $ do
     -- you'll probably want to change this to a more robust auth backend.
     a <- nestSnaplet "auth" auth $
            initJsonFileAuthManager defAuthSettings sess "users.json"
+    d <- nestSnaplet "pg" pg pgsInit
     addRoutes routes
     addAuthSplices h auth
-    return $ App h s a
+    return $ App h s a d
 
