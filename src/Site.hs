@@ -10,6 +10,8 @@ module Site
 
 ------------------------------------------------------------------------------
 import           Control.Applicative
+import           Control.Monad.Trans
+import           Database.PostgreSQL.Simple.FromRow
 import           Data.ByteString (ByteString)
 import qualified Data.Text as T
 import           Snap.Core
@@ -25,47 +27,29 @@ import qualified Heist.Interpreted as I
 ------------------------------------------------------------------------------
 import           Application
 
+data Article = Article
+  { id      :: Int
+  , title   :: T.Text
+  , content :: T.Text
+  }
 
-------------------------------------------------------------------------------
--- | Render login form
-handleLogin :: Maybe T.Text -> Handler App (AuthManager App) ()
-handleLogin authError = heistLocal (I.bindSplices errs) $ render "login"
-  where
-    errs = maybe mempty splice authError
-    splice err = "loginError" ## I.textSplice err
+instance FromRow Article where
+  fromRow = Article <$> field <*> field <*> field
 
+instance Show Article where
+  show (Article id title content) =
+    "Article { title: " ++ T.unpack title ++ ", content: " ++ T.unpack content ++ " }n"
 
-------------------------------------------------------------------------------
--- | Handle login submit
-handleLoginSubmit :: Handler App (AuthManager App) ()
-handleLoginSubmit =
-    loginUser "login" "password" Nothing
-              (\_ -> handleLogin err) (redirect "/")
-  where
-    err = Just "Unknown user or password"
-
-
-------------------------------------------------------------------------------
--- | Logs out and redirects the user to the site index.
-handleLogout :: Handler App (AuthManager App) ()
-handleLogout = logout >> redirect "/"
-
-
-------------------------------------------------------------------------------
--- | Handle new user form submit
-handleNewUser :: Handler App (AuthManager App) ()
-handleNewUser = method GET handleForm <|> method POST handleFormSubmit
-  where
-    handleForm = render "new_user"
-    handleFormSubmit = registerUser "login" "password" >> redirect "/"
-
+-- | Handle request for posts
+handlePosts :: Handler App App ()
+handlePosts = do
+  posts <- with pg $ query_ "select * from article"
+  liftIO $ print (posts :: [Article])
 
 ------------------------------------------------------------------------------
 -- | The application's routes.
 routes :: [(ByteString, Handler App App ())]
-routes = [ ("/login",    with auth handleLoginSubmit)
-         , ("/logout",   with auth handleLogout)
-         , ("/new_user", with auth handleNewUser)
+routes = [ ("/posts", handlePosts)
          , ("",          serveDirectory "static")
          ]
 
