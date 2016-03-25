@@ -68,7 +68,7 @@ indexHandler = cRender "index"
 ------------------------------------------------------------------------------
 -- | The application's routes.
 routes :: [(ByteString, Handler App App ())]
-routes = [ ("assets", serveDirectory "static")
+routes = [ ("static", serveDirectory "static")
          , ("/", indexHandler)
          ]
 
