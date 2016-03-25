@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Serendipitous</title>
-    <link rel="stylesheet" type="text/css" href="/screen.css"/>
+    <link rel="stylesheet" type="text/css" href="assets/screen.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>

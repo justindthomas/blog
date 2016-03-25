@@ -36,7 +36,10 @@ Executable blog
     snaplet-postgresql-simple >= 0.6     && < 0.7,
     text                      >= 0.11    && < 1.3,
     time                      >= 1.1     && < 1.6,
-    xmlhtml                   >= 0.1     && < 0.3
+    xmlhtml                   >= 0.1     && < 0.3,
+    transformers              >= 0.4     && < 0.5,
+    either                    >= 4.4     && < 4.5,
+    map-syntax                >= 0.2     && < 0.3
 
   if flag(old-base)
     build-depends:
