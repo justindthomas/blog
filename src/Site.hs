@@ -62,14 +62,11 @@ articleSplices = "articles" ## (renderArticles runtime)
 allCompiledSplices :: MonadSnap n => Splices (C.Splice n)
 allCompiledSplices = mconcat [ articleSplices ]
 
-indexHandler :: Handler App App ()
-indexHandler = cRender "index"
-
 ------------------------------------------------------------------------------
 -- | The application's routes.
 routes :: [(ByteString, Handler App App ())]
-routes = [ ("static", serveDirectory "static")
-         , ("/", indexHandler)
+routes = [ ("/", ifTop $ cRender "index")
+         , ("/static", serveDirectory "static")
          ]
 
 
