@@ -74,7 +74,12 @@ routes = [ ("/", ifTop $ cRender "index")
 -- | The application initializer.
 app :: SnapletInit App App
 app = makeSnaplet "app" "An snaplet example application." Nothing $ do
-    h <- nestSnaplet "" heist $ heistInit "templates"
+    let hc = emptyHeistConfig
+             & hcNamespace .~ ""
+             & hcTemplateLocations .~ [loadTemplates "templates"]
+             & hcLoadTimeSplices .~ defaultLoadTimeSplices
+             & hcCompiledSplices .~ articleSplices
+    h <- nestSnaplet "" heist $ heistInit' "templates" hc
     let sc = mempty & scCompiledSplices .~ articleSplices
     addConfig h sc
     s <- nestSnaplet "sess" sess $
