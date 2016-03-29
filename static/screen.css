@@ -37,7 +37,9 @@ img {
 
 p {
     position: relative;
+    clear: left;
     float: left;
+    width: 70%;
     margin: 0;
     padding: 0;
 }

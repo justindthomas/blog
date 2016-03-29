@@ -31,36 +31,38 @@ import           Snap.Util.FileServe
 import           Snap.Snaplet.PostgresqlSimple
 import           Heist
 import           Heist.Splices
-import qualified Heist.Interpreted as I
 import qualified Heist.Compiled as C
 
 ------------------------------------------------------------------------------
 import           Application
 
 data Article = Article
-  { title   :: T.Text
+  { id      :: Int
+  , title   :: T.Text
   , content :: T.Text
   }
 
-runtime :: Monad n => RuntimeSplice n [Article]
-runtime = return [
-      Article "intro" "content",
-      Article "intro2" "content2"
-  ]
+splice :: (HasPostgres n, Monad n) => C.Splice n
+splice = do
+  C.manyWithSplices C.runChildren articleSplices $
+    lift $ query_ "SELECT * FROM article"
+  where
+    articleSplices = do
+      mapS (C.pureSplice . C.textSplice) $ do
+        "articleTitle" ## title
+        "articleContent" ## content
 
-splicesFromArticle :: Monad n => Splices (RuntimeSplice n Article -> C.Splice n)
-splicesFromArticle = mapS (C.pureSplice . C.textSplice) $ do
-  "articleTitle" ## title
-  "articleContent" ## content
+articlesSplice :: (HasPostgres n, Monad n) => Splices (C.Splice n)
+articlesSplice = "articles" ## splice
 
-renderArticles :: Monad n => RuntimeSplice n [Article] -> C.Splice n
-renderArticles = C.manyWithSplices C.runChildren splicesFromArticle
+allCompiledSplices :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
+allCompiledSplices = mconcat [ articlesSplice ]
 
-articleSplices :: Monad n => Splices (C.Splice n)
-articleSplices = "articles" ## (renderArticles runtime)
+------------------------------------------------------------------------------
+-- / Postgres
 
-allCompiledSplices :: MonadSnap n => Splices (C.Splice n)
-allCompiledSplices = mconcat [ articleSplices ]
+instance FromRow Article where
+    fromRow = Article <$> field <*> field <*> field
 
 ------------------------------------------------------------------------------
 -- | The application's routes.
@@ -78,9 +80,9 @@ app = makeSnaplet "app" "An snaplet example application." Nothing $ do
              & hcNamespace .~ ""
              & hcTemplateLocations .~ [loadTemplates "templates"]
              & hcLoadTimeSplices .~ defaultLoadTimeSplices
-             & hcCompiledSplices .~ articleSplices
+             & hcCompiledSplices .~ allCompiledSplices
     h <- nestSnaplet "" heist $ heistInit' "templates" hc
-    let sc = mempty & scCompiledSplices .~ articleSplices
+    let sc = mempty & scCompiledSplices .~ allCompiledSplices
     addConfig h sc
     s <- nestSnaplet "sess" sess $
            initCookieSessionManager "site_key.txt" "sess" (Just 3600)
