@@ -22,6 +22,10 @@ import           Snap.Util.FileServe
 import           Snap.Snaplet.PostgresqlSimple
 import           Heist
 import qualified Heist.Compiled as C
+import qualified Text.Markdown as MD
+import qualified Text.Blaze.Html.Renderer.Text as X
+import           Text.Blaze.Html
+import qualified Data.Text.Lazy as L
 
 ------------------------------------------------------------------------------
 import           Application
@@ -41,7 +45,10 @@ splice = do
       mapV (C.pureSplice . C.textSplice) $ do
         "articleId" ## T.pack . show . articleId
         "articleTitle" ## title
-        "articleContent" ## content
+        "articleContent" ## T.pack $ L.unpack $ X.renderHtml $ markdownToHtml $ T.pack $ show content
+
+markdownToHtml :: T.Text -> Html
+markdownToHtml = MD.markdown MD.def . L.fromStrict
 
 articlesSplice :: (HasPostgres n, Monad n) => Splices (C.Splice n)
 articlesSplice = "articles" ## splice
