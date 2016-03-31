@@ -45,10 +45,10 @@ splice = do
       mapV (C.pureSplice . C.textSplice) $ do
         "articleId" ## T.pack . show . articleId
         "articleTitle" ## title
-        "articleContent" ## T.pack $ L.unpack $ X.renderHtml $ markdownToHtml $ T.pack $ show content
+        "articleContent" ## markdownToHtml . content
 
-markdownToHtml :: T.Text -> Html
-markdownToHtml = MD.markdown MD.def . L.fromStrict
+markdownToHtml :: T.Text -> T.Text
+markdownToHtml = T.pack . L.unpack . X.renderHtml . MD.markdown MD.def . L.fromStrict
 
 articlesSplice :: (HasPostgres n, Monad n) => Splices (C.Splice n)
 articlesSplice = "articles" ## splice
