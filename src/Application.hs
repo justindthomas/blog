@@ -12,7 +12,6 @@ import           Control.Monad.Reader
 import           Control.Monad.State
 import           Control.Lens
 import           Snap
-import           Snap.Snaplet.Auth
 import           Snap.Snaplet.Heist
 import           Snap.Snaplet.PostgresqlSimple
 import           Snap.Snaplet.Session
@@ -21,7 +20,6 @@ import           Snap.Snaplet.Session
 data App = App
     { _heist :: Snaplet (Heist App)
     , _sess :: Snaplet SessionManager
-    , _auth :: Snaplet (AuthManager App)
     , _pg :: Snaplet Postgres 
     }
 

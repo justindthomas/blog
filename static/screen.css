@@ -23,38 +23,37 @@ img {
     border: none;
 }
 
+div {
+    position: relative;
+    float: left;
+}
+
 #header {
     position: relative;
     float: left;
-    padding-left: 1em;
-    padding-top: 5px;
-    padding-bottom: 5px;
     width: 100%;
     margin: 0;
+    padding: 0;
     background: #000000;
     color: #ffffff;
 }
 
-p {
+#header p {
     position: relative;
-    clear: left;
-    float: left;
-    width: 70%;
     margin: 0;
-    padding: 0;
+    padding: 0.5em;
+    font-size: large;
 }
 
 #content div {
-    margin: 0;
-    padding: 0;
+    margin-left: 2%;
+    padding-top: 1em;
+    width: 96%;
 }
 
 #content p {
-    margin-left: 1em;
-    margin-right: 1em;
-    margin-top: 0.5em;
-    padding: 1em;
-    background: #f6f6f6;
+    clear: left;
+    float: left;
 }
 
 #content p > span {
