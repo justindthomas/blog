@@ -5,3 +5,4 @@ log/error.log
 site_key.txt
 dist
 credentials
+*.mp3
