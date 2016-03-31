@@ -9,10 +9,12 @@ module Site
   ) where
 
 ------------------------------------------------------------------------------
+import           Control.Applicative
 import           Control.Lens
 import           Control.Monad.Trans
 import           Database.PostgreSQL.Simple.FromRow
 import           Data.ByteString (ByteString)
+import           Data.Monoid
 import qualified Data.Text as T
 import           Snap.Core
 import           Snap.Snaplet
