@@ -64,15 +64,31 @@ div {
     width: 96%;
 }
 
-#content div {
+#content > div {
     clear: left;
-    float: left;
     background: #ffffff;
-    border: 1px solid #aaaaaa;
-    border-radius: 5px;
-    padding: 1em;
+    padding: 0;
     margin-bottom: 1em;
 }
+
+#content > div > div:first-child {
+    clear: left;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: right;
+    margin: 0;
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+    margin-bottom: 0.5em;
+    background: #aaaaaa;
+    color: #eeeeee;
+}
+
+#content > div > div {
+    clear: left;
+    padding: 1em;
+}
+    
 
 #content h1 {
     padding-bottom: 0.5em;
