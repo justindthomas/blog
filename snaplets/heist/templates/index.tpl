@@ -1,5 +1,5 @@
 <apply template="base">
     <articles>
-      <div><articleContent/></div>
+      <div><p><articleCreation/></p><articleContent/></div>
     </articles>
 </apply>

@@ -13,6 +13,8 @@ import           Control.Applicative
 import           Control.Lens
 import           Control.Monad.Trans
 import           Database.PostgreSQL.Simple.FromRow
+import           Database.PostgreSQL.Simple.Time
+import           Data.Time
 import           Data.ByteString (ByteString)
 import           Data.Monoid
 import qualified Data.Text as T
@@ -36,10 +38,11 @@ data Article = Article
   { articleId  :: Int
   , title      :: T.Text
   , content    :: T.Text
+  , created_at :: LocalTime
   }
 
-splice :: (HasPostgres n, Monad n) => C.Splice n
-splice = do
+splice :: (HasPostgres n, Monad n) => TimeZone -> C.Splice n
+splice tz = do
   C.manyWithSplices C.runChildren articleSplices $
     lift $ query_ "SELECT * FROM article"
   where
@@ -48,21 +51,25 @@ splice = do
         "articleId" ## T.pack . show . articleId
         "articleTitle" ## title
         "articleContent" ## markdownToHtml . content
+        "articleCreation" ## presentTime tz . created_at
 
 markdownToHtml :: T.Text -> T.Text
 markdownToHtml = T.pack . L.unpack . X.renderHtml . MD.markdown MD.def . L.fromStrict
 
-articlesSplice :: (HasPostgres n, Monad n) => Splices (C.Splice n)
-articlesSplice = "articles" ## splice
+presentTime :: TimeZone -> LocalTime -> T.Text
+presentTime tz l = T.pack . show . utctDay $ localTimeToUTC tz l
 
-allCompiledSplices :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
-allCompiledSplices = mconcat [ articlesSplice ]
+articlesSplice :: (HasPostgres n, Monad n) => TimeZone -> Splices (C.Splice n)
+articlesSplice tz = "articles" ## splice tz
+
+--allCompiledSplices :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
+--allCompiledSplices = mconcat [ articlesSplice ]
 
 ------------------------------------------------------------------------------
 -- / Postgres
 
 instance FromRow Article where
-    fromRow = Article <$> field <*> field <*> field
+    fromRow = Article <$> field <*> field <*> field <*> field
 
 ------------------------------------------------------------------------------
 -- | The application's routes.
@@ -77,11 +84,12 @@ routes = [ ("/", ifTop $ cRender "index")
 -- | The application initializer.
 app :: SnapletInit App App
 app = makeSnaplet "app" "Pure nonsense." Nothing $ do
+    tz <- liftIO getCurrentTimeZone
     let hc = emptyHeistConfig
              & hcNamespace .~ ""
              & hcTemplateLocations .~ [loadTemplates "templates"]
              & hcLoadTimeSplices .~ defaultLoadTimeSplices
-             & hcCompiledSplices .~ allCompiledSplices
+             & hcCompiledSplices .~ (articlesSplice tz)
     h <- nestSnaplet "" heist $ heistInit' "templates" hc
     s <- nestSnaplet "sess" sess $
            initCookieSessionManager "site_key.txt" "sess" (Just 3600)
