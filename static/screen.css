@@ -75,8 +75,7 @@ div {
     background: #777777;
     padding: 0;
     margin-bottom: 1em;
-    border-top: 2px solid #333;
-    border-bottom: 2px solid #333;
+    border-top: 1px solid #333;
 }
 
 #content > div > div:first-child {
@@ -87,7 +86,6 @@ div {
     padding-top: 0.25em;
     padding-bottom: 0.25em;
     color: #333;
-    border-bottom: 1px solid #eee;
 }
 
 #content > div > div {
