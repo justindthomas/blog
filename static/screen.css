@@ -80,9 +80,9 @@ div {
 .creation, .title {
     width: 50%;
     margin: 0;
-    padding-top: 0.25em;
-    padding-bottom: 0.25em;
+    padding: 1em;
     color: #333;
+    background: #fff;
     border-radius: 5px 5px 0 0;
 }
 
@@ -93,15 +93,11 @@ div {
 .article {
     width: 100%;
     border-radius: 0 0 5px 5px;
-}
-
-#content > div > div {
     padding: 1em;
     background: #fff;
-}
-    
+}    
 
-#content h1 {
+.article h1 {
     padding-bottom: 0.5em;
     margin: 0;
     font-size: large;
