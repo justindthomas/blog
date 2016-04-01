@@ -11,6 +11,7 @@ module Application where
 import           Control.Monad.Reader
 import           Control.Monad.State
 import           Control.Lens
+import           Data.Time
 import           Snap
 import           Snap.Snaplet.Heist
 import           Snap.Snaplet.PostgresqlSimple
@@ -20,7 +21,8 @@ import           Snap.Snaplet.Session
 data App = App
     { _heist :: Snaplet (Heist App)
     , _sess :: Snaplet SessionManager
-    , _pg :: Snaplet Postgres 
+    , _pg :: Snaplet Postgres
+    , _tz :: TimeZone
     }
 
 makeLenses ''App

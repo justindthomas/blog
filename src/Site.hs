@@ -41,8 +41,8 @@ data Article = Article
   , created_at :: LocalTime
   }
 
-splice :: (HasPostgres n, Monad n) => TimeZone -> C.Splice n
-splice tz = do
+splice :: C.Splice (Handler App App)
+splice = do
   C.manyWithSplices C.runChildren articleSplices $
     lift $ query_ "SELECT * FROM article"
   where
@@ -51,16 +51,16 @@ splice tz = do
         "articleId" ## T.pack . show . articleId
         "articleTitle" ## title
         "articleContent" ## markdownToHtml . content
-        "articleCreation" ## presentTime tz . created_at
+        "articleCreation" ## presentTime . created_at
 
 markdownToHtml :: T.Text -> T.Text
 markdownToHtml = T.pack . L.unpack . X.renderHtml . MD.markdown MD.def . L.fromStrict
 
-presentTime :: TimeZone -> LocalTime -> T.Text
-presentTime tz l = T.pack . show . utctDay $ localTimeToUTC tz l
+presentTime :: LocalTime -> T.Text
+presentTime l = T.pack . show . utctDay . (localTimeToUTC _tz l)
 
-articlesSplice :: (HasPostgres n, Monad n) => TimeZone -> Splices (C.Splice n)
-articlesSplice tz = "articles" ## splice tz
+articlesSplice :: Splices (C.Splice (Handler App App))
+articlesSplice = "articles" ## splice
 
 --allCompiledSplices :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
 --allCompiledSplices = mconcat [ articlesSplice ]
@@ -89,10 +89,10 @@ app = makeSnaplet "app" "Pure nonsense." Nothing $ do
              & hcNamespace .~ ""
              & hcTemplateLocations .~ [loadTemplates "templates"]
              & hcLoadTimeSplices .~ defaultLoadTimeSplices
-             & hcCompiledSplices .~ (articlesSplice tz)
+             & hcCompiledSplices .~ articlesSplice
     h <- nestSnaplet "" heist $ heistInit' "templates" hc
     s <- nestSnaplet "sess" sess $
            initCookieSessionManager "site_key.txt" "sess" (Just 3600)
     d <- nestSnaplet "pg" pg pgsInit
     addRoutes routes
-    return $ App h s d
+    return $ App h s d tz
