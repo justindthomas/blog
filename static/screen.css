@@ -66,9 +66,11 @@ div {
 
 #content > div {
     clear: left;
-    background: #ffffff;
+    background: #777777;
     padding: 0;
     margin-bottom: 1em;
+    border-radius: 5px;
+    border: 1px solid #777777;
 }
 
 #content > div > div:first-child {
@@ -79,14 +81,16 @@ div {
     margin: 0;
     padding-top: 0.25em;
     padding-bottom: 0.25em;
-    margin-bottom: 0.5em;
-    background: #aaaaaa;
+    border-bottom: 1px solid #777777;
+    background: #777777;
     color: #eeeeee;
 }
 
 #content > div > div {
     clear: left;
     padding: 1em;
+    background: #ffffff;
+    border-radius: 0 0 5px 5px;
 }
     
 
