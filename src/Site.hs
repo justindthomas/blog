@@ -44,7 +44,7 @@ data Article = Article
 splice :: (HasPostgres n, Monad n) => TimeZone -> C.Splice n
 splice tz = do
   C.manyWithSplices C.runChildren articleSplices $
-    lift $ query_ "SELECT * FROM article"
+    lift $ query_ "SELECT * FROM article ORDER BY created_at DESC"
   where
     articleSplices = do
       mapV (C.pureSplice . C.textSplice) $ do
