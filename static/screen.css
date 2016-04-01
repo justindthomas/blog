@@ -26,7 +26,7 @@ a :hover {
 
 img {
     position: relative;
-    flaot: left;
+    float: left;
     border: none;
     max-width: 100%;
     height: auto;
@@ -71,25 +71,31 @@ div {
 }
 
 #content > div {
-    clear: left;
-    background: #777777;
     padding: 0;
     margin-bottom: 1em;
-    border-top: 1px solid #333;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
-#content > div > div:first-child {
-    clear: left;
-    text-align: right;
+.creation, .title {
+    width: 50%;
     margin: 0;
-    width: 100%;
     padding-top: 0.25em;
     padding-bottom: 0.25em;
     color: #333;
+    border-radius: 5px 5px 0 0;
+}
+
+.creation {
+    text-align: right;
+}
+
+.article {
+    width: 100%;
+    border-radius: 0 0 5px 5px;
 }
 
 #content > div > div {
-    clear: left;
     padding: 1em;
     background: #fff;
 }
