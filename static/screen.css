@@ -29,6 +29,7 @@ img {
     flaot: left;
     border: none;
     max-width: 100%;
+    height: auto;
     margin-top: 1em;
     margin-bottom: 1em;
 }
@@ -42,6 +43,7 @@ audio {
 div {
     position: relative;
     float: left;
+    box-sizing: border-box;
 }
 
 #header {
@@ -64,33 +66,34 @@ div {
     width: 96%;
 }
 
+#content div {
+    max-width: 100%;
+}
+
 #content > div {
     clear: left;
     background: #777777;
     padding: 0;
     margin-bottom: 1em;
-    border-radius: 5px;
-    border: 1px solid #777777;
+    border-top: 2px solid #333;
+    border-bottom: 2px solid #333;
 }
 
 #content > div > div:first-child {
     clear: left;
-    width: 100%;
-    box-sizing: border-box;
     text-align: right;
     margin: 0;
+    width: 100%;
     padding-top: 0.25em;
     padding-bottom: 0.25em;
-    border-bottom: 1px solid #777777;
-    background: #777777;
-    color: #eeeeee;
+    color: #333;
+    border-bottom: 1px solid #eee;
 }
 
 #content > div > div {
     clear: left;
     padding: 1em;
-    background: #ffffff;
-    border-radius: 0 0 5px 5px;
+    background: #fff;
 }
     
 
