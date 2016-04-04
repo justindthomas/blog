@@ -89,17 +89,15 @@ div {
 
 .creation {
     text-align: right;
+    float: right;
 }
 
 .article {
     width: 100%;
+    clear: both;
     border-radius: 0 0 5px 5px;
-    padding: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 1em;
     background: #fff;
 }    
-
-.article h1 {
-    padding-bottom: 0.5em;
-    margin: 0;
-    font-size: large;
-}
