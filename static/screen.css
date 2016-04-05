@@ -75,6 +75,7 @@ div {
     padding: 0;
     margin-bottom: 1em;
     border: 1px solid #ddd;
+    background: #fff;
     border-radius: 5px;
 }
 
@@ -83,13 +84,14 @@ div {
     margin: 0;
     padding: 1em;
     color: #333;
-    background: #fff;
-    border-radius: 5px 5px 0 0;
+    border-radius: 5px 0 0 0;
+    color: #999;
 }
 
 .creation {
     text-align: right;
     float: right;
+    border-radius: 0 5px 0 0;
 }
 
 .article {
@@ -99,5 +101,14 @@ div {
     padding-left: 1em;
     padding-right: 1em;
     padding-bottom: 1em;
-    background: #fff;
-}    
+}
+
+.article > p {
+    padding-bottom: 1em;
+    padding-left: 1em;
+}
+
+code p {
+    padding: 0;
+    margin: 0;
+}
