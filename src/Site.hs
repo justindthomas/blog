@@ -15,6 +15,7 @@ import           Control.Monad.Trans
 import           Database.PostgreSQL.Simple.FromRow
 import           Database.PostgreSQL.Simple.Time
 import           Data.Time
+import           Data.Time.Format
 import           Data.ByteString (ByteString)
 import           Data.Monoid
 import qualified Data.Text as T
@@ -51,13 +52,13 @@ splice tz = do
         "articleId" ## T.pack . show . articleId
         "articleTitle" ## title
         "articleContent" ## markdownToHtml . content
-        "articleCreation" ## presentTime tz . created_at
+        "articleCreation" ## presentTime . created_at
 
 markdownToHtml :: T.Text -> T.Text
 markdownToHtml = T.pack . L.unpack . X.renderHtml . MD.markdown MD.def . L.fromStrict
 
-presentTime :: TimeZone -> LocalTime -> T.Text
-presentTime tz l = T.pack . show . utctDay $ localTimeToUTC tz l
+presentTime :: LocalTime -> T.Text
+presentTime = T.pack . formatTime defaultTimeLocale "%B %d, %Y"
 
 articlesSplice :: (HasPostgres n, Monad n) => TimeZone -> Splices (C.Splice n)
 articlesSplice tz = "articles" ## splice tz
