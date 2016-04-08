@@ -78,6 +78,7 @@ routes :: [(ByteString, Handler App App ())]
 routes = [ ("/", ifTop $ cRender "index")
          , ("/static", serveDirectory "static")
          , ("/media", serveDirectory "media")
+         , ("/favicon.ico", serveFile "static/favicon.ico")
          ]
 
 
