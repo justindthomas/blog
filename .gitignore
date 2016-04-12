@@ -6,3 +6,4 @@ site_key.txt
 dist
 credentials
 *.mp3
+.DS_Store
