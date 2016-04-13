@@ -27,10 +27,9 @@ import           Snap.Util.FileServe
 import           Snap.Snaplet.PostgresqlSimple
 import           Heist
 import qualified Heist.Compiled as C
-import qualified Text.Markdown as MD
-import qualified Text.Blaze.Html.Renderer.Text as X
-import           Text.Blaze.Html
 import qualified Data.Text.Lazy as L
+import           Text.Pandoc
+import           Text.Pandoc.Error (handleError)
 
 ------------------------------------------------------------------------------
 import           Application
@@ -55,7 +54,13 @@ splice tz = do
         "articleCreation" ## presentTime . created_at
 
 markdownToHtml :: T.Text -> T.Text
-markdownToHtml = T.pack . L.unpack . X.renderHtml . MD.markdown MD.def . L.fromStrict
+markdownToHtml = pandocToHtml . markdownToPandoc
+
+markdownToPandoc :: T.Text -> Pandoc
+markdownToPandoc = handleError . readMarkdown def . T.unpack
+
+pandocToHtml :: Pandoc -> T.Text
+pandocToHtml = T.pack . writeHtmlString def
 
 presentTime :: LocalTime -> T.Text
 presentTime = T.pack . formatTime defaultTimeLocale "%B %d, %Y"
