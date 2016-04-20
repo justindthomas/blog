@@ -54,6 +54,18 @@ splice = do
         "articleContent" ## markdownToHtml . content
         "articleCreation" ## presentTime . created_at
 
+singleArticleSplice :: (HasPostgres n, Monad n) => Int -> C.Splice n
+singleArticleSplice a = do
+  C.manyWithSplices C.runChildren articleSplice $
+    lift $ query "SELECT * FROM article WHERE id in ?" (Only (In [a]))
+  where
+    articleSplice = do
+      mapV (C.pureSplice . C.textSplice) $ do
+        "articleId" ## T.pack . show . articleId
+        "articleTitle" ## title
+        "articleContent" ## markdownToHtml . content
+        "articleCreation" ## presentTime . created_at
+
 markdownToHtml :: T.Text -> T.Text
 markdownToHtml = pandocToHtml . markdownToPandoc
 
@@ -69,11 +81,11 @@ presentTime = T.pack . formatTime defaultTimeLocale "%B %d, %Y"
 articlesSplice :: (HasPostgres n, Monad n) => Splices (C.Splice n)
 articlesSplice = "articles" ## splice
 
---allCompiledSplices :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
---allCompiledSplices = mconcat [ articlesSplice ]
+articleSplice :: (HasPostgres n, Monad n) => Int -> Splices (C.Splice n)
+articleSplice a = "article" ## (singleArticleSplice a)
 
-contentSplice :: (HasPostgres n, Monad n) => T.Text -> C.Splice n
-contentSplice c = C.pureSplice $ C.textSplice $ "articleContent" ## c
+allCompiledSplices :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
+allCompiledSplices = mconcat [ articlesSplice ]
 
 getArticle :: Handler App App ()
 getArticle = do
@@ -108,7 +120,7 @@ app = makeSnaplet "app" "Pure nonsense." Nothing $ do
              & hcNamespace .~ ""
              & hcTemplateLocations .~ [loadTemplates "templates"]
              & hcLoadTimeSplices .~ defaultLoadTimeSplices
-             & hcCompiledSplices .~ articlesSplice
+             & hcCompiledSplices .~ allCompiledSplices
     h <- nestSnaplet "" heist $ heistInit' "templates" hc
     s <- nestSnaplet "sess" sess $
            initCookieSessionManager "site_key.txt" "sess" (Just 3600)
