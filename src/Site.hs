@@ -28,6 +28,7 @@ import           Snap.Util.FileServe
 import           Snap.Snaplet.PostgresqlSimple
 import           Heist
 import qualified Heist.Compiled as C
+import qualified Heist.Interpreted as I
 import qualified Data.Text.Lazy as L
 import           Text.Pandoc
 import           Text.Pandoc.Error (handleError)
@@ -54,19 +55,6 @@ allArticlesSplice = do
         "articleContent" ## markdownToHtml . content
         "articleCreation" ## presentTime . created_at
 
-singleArticleSplice :: (MonadSnap n, HasPostgres n) => C.Splice n
-singleArticleSplice = do
-  a <- getParam "id"
-  C.manyWithSplices C.runChildren articleSplice $
-    lift $ query "SELECT * FROM article WHERE id = ?" (Only a)
-  where
-    articleSplice = do
-      mapV (C.pureSplice . C.textSplice) $ do
-        "articleId" ## T.pack . show . articleId
-        "articleTitle" ## title
-        "articleContent" ## markdownToHtml . content
-        "articleCreation" ## presentTime . created_at
-
 markdownToHtml :: T.Text -> T.Text
 markdownToHtml = pandocToHtml . markdownToPandoc
 
@@ -82,17 +70,27 @@ presentTime = T.pack . formatTime defaultTimeLocale "%B %d, %Y"
 articlesSplice :: (HasPostgres n, Monad n) => Splices (C.Splice n)
 articlesSplice = "articles" ## allArticlesSplice
 
-articleSplice :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
-articleSplice = "article" ## singleArticleSplice
-
 allCompiledSplices :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
-allCompiledSplices = mconcat [ articlesSplice, articleSplice ]
+allCompiledSplices = mconcat [ articlesSplice ]
 
 getArticle :: Handler App App ()
 getArticle = do
   articleId <- getParam "id"
   articles <- query "SELECT * FROM article WHERE id = ?" (Only articleId)
-  writeBS $ encodeUtf8 $ markdownToHtml $ content $ head articles
+  renderWithSplices "article" $ singleArticleSplice $ head articles
+
+singleArticleSplice :: Article -> Splices (SnapletISplice App)
+singleArticleSplice a = "article" ## (renderArticles [a])
+
+renderArticles :: [Article] -> SnapletISplice App
+renderArticles = I.mapSplices $ I.runChildrenWith . splicesFromArticle
+
+splicesFromArticle :: Monad n => Article -> Splices (I.Splice n)
+splicesFromArticle a = do
+  "articleId" ## I.textSplice $ T.pack $ show $ articleId a
+  "articleTitle" ## I.textSplice $ title a
+  "articleContent" ## I.textSplice $ markdownToHtml $ content a
+  "articleCreation" ## I.textSplice $ presentTime $ created_at a
 
 ------------------------------------------------------------------------------
 -- / Postgres
