@@ -42,8 +42,8 @@ data Article = Article
   , created_at :: LocalTime
   }
 
-splice :: (HasPostgres n, Monad n) => C.Splice n
-splice = do
+allArticlesSplice :: (HasPostgres n, Monad n) => C.Splice n
+allArticlesSplice = do
   C.manyWithSplices C.runChildren articleSplices $
     lift $ query_ "SELECT * FROM article ORDER BY created_at DESC"
   where
@@ -54,10 +54,11 @@ splice = do
         "articleContent" ## markdownToHtml . content
         "articleCreation" ## presentTime . created_at
 
-singleArticleSplice :: (HasPostgres n, Monad n) => Int -> C.Splice n
-singleArticleSplice a = do
+singleArticleSplice :: (MonadSnap n, HasPostgres n) => C.Splice n
+singleArticleSplice = do
+  a <- getParam "id"
   C.manyWithSplices C.runChildren articleSplice $
-    lift $ query "SELECT * FROM article WHERE id in ?" (Only (In [a]))
+    lift $ query "SELECT * FROM article WHERE id = ?" (Only a)
   where
     articleSplice = do
       mapV (C.pureSplice . C.textSplice) $ do
@@ -79,13 +80,13 @@ presentTime :: LocalTime -> T.Text
 presentTime = T.pack . formatTime defaultTimeLocale "%B %d, %Y"
 
 articlesSplice :: (HasPostgres n, Monad n) => Splices (C.Splice n)
-articlesSplice = "articles" ## splice
+articlesSplice = "articles" ## allArticlesSplice
 
-articleSplice :: (HasPostgres n, Monad n) => Int -> Splices (C.Splice n)
-articleSplice a = "article" ## (singleArticleSplice a)
+articleSplice :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
+articleSplice = "article" ## singleArticleSplice
 
 allCompiledSplices :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
-allCompiledSplices = mconcat [ articlesSplice ]
+allCompiledSplices = mconcat [ articlesSplice, articleSplice ]
 
 getArticle :: Handler App App ()
 getArticle = do
