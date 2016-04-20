@@ -2,7 +2,7 @@
 <rss version="2.0">
 <channel>
 
-<title>Serendipitous RSS Feed</title>
+<title>Serendipitous Articles</title>
 <link>https://ser.endipito.us/</link>
 <description>Unfiltered Noise</description>
 
@@ -10,7 +10,7 @@
     <item>
       <title><articleTitle/></title>
       <link>https://ser.endipito.us/articles/<articleId/></link>
-      <guid>https://ser.endipito.us/articles/<articleId/><guid>
+      <guid>https://ser.endipito.us/articles/<articleId/></guid>
       <pubDate><articleCreation/></pubDate>
       <description>A description.</description>
     </item>

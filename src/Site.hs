@@ -19,6 +19,7 @@ import           Data.Time.Format
 import           Data.ByteString (ByteString)
 import           Data.Monoid
 import qualified Data.Text as T
+import           Data.Text.Encoding (encodeUtf8)
 import           Snap.Core
 import           Snap.Snaplet
 import           Snap.Snaplet.Heist
@@ -41,8 +42,8 @@ data Article = Article
   , created_at :: LocalTime
   }
 
-splice :: (HasPostgres n, Monad n) => TimeZone -> C.Splice n
-splice tz = do
+splice :: (HasPostgres n, Monad n) => C.Splice n
+splice = do
   C.manyWithSplices C.runChildren articleSplices $
     lift $ query_ "SELECT * FROM article ORDER BY created_at DESC"
   where
@@ -65,11 +66,20 @@ pandocToHtml = T.pack . writeHtmlString def
 presentTime :: LocalTime -> T.Text
 presentTime = T.pack . formatTime defaultTimeLocale "%B %d, %Y"
 
-articlesSplice :: (HasPostgres n, Monad n) => TimeZone -> Splices (C.Splice n)
-articlesSplice tz = "articles" ## splice tz
+articlesSplice :: (HasPostgres n, Monad n) => Splices (C.Splice n)
+articlesSplice = "articles" ## splice
 
 --allCompiledSplices :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
 --allCompiledSplices = mconcat [ articlesSplice ]
+
+contentSplice :: (HasPostgres n, Monad n) => T.Text -> C.Splice n
+contentSplice c = C.pureSplice $ C.textSplice $ "articleContent" ## c
+
+getArticle :: Handler App App ()
+getArticle = do
+  articleId <- getParam "id"
+  articles <- query "SELECT * FROM article WHERE id = ?" (Only articleId)
+  writeBS $ encodeUtf8 $ markdownToHtml $ content $ head articles
 
 ------------------------------------------------------------------------------
 -- / Postgres
@@ -81,8 +91,10 @@ instance FromRow Article where
 -- | The application's routes.
 routes :: [(ByteString, Handler App App ())]
 routes = [ ("/", ifTop $ cRender "index")
+         , ("/articles/:id", getArticle)
          , ("/static", serveDirectory "static")
          , ("/media", serveDirectory "media")
+         , ("/rss", cRenderAs "application/rss+xml" "rss")
          , ("/favicon.ico", serveFile "static/favicon.ico")
          ]
 
@@ -96,7 +108,7 @@ app = makeSnaplet "app" "Pure nonsense." Nothing $ do
              & hcNamespace .~ ""
              & hcTemplateLocations .~ [loadTemplates "templates"]
              & hcLoadTimeSplices .~ defaultLoadTimeSplices
-             & hcCompiledSplices .~ (articlesSplice tz)
+             & hcCompiledSplices .~ articlesSplice
     h <- nestSnaplet "" heist $ heistInit' "templates" hc
     s <- nestSnaplet "sess" sess $
            initCookieSessionManager "site_key.txt" "sess" (Just 3600)
