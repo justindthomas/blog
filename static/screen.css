@@ -17,11 +17,12 @@ p {
 
 a {
     text-decoration: underline;
+    color: black;
 }
 
-a :hover {
+a:hover {
     cursor: pointer;
-    text-decoration: underline;
+    background-color: lightyellow;
 }
 
 img {
