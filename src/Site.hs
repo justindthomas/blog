@@ -28,6 +28,7 @@ import           Snap.Util.FileServe
 import           Snap.Snaplet.PostgresqlSimple
 import           Heist
 import qualified Heist.Compiled as C
+import qualified Heist.Compiled.LowLevel as C
 import qualified Heist.Interpreted as I
 import qualified Data.Text.Lazy as L
 import           Text.Pandoc
@@ -55,6 +56,25 @@ allArticlesSplice = do
         "articleContent" ## markdownToHtml . content
         "articleCreation" ## presentTime . created_at
 
+singleArticleSpliceLookup :: (HasPostgres n, MonadSnap n) => C.Splice n
+singleArticleSpliceLookup = do
+  promise <- C.newEmptyPromise
+  outputChildren <- C.manyWithSplices C.runChildren singleArticleSplices (C.getPromise promise)
+  return $ C.yieldRuntime $ do
+    id <- lift $ getParam "id"
+    articles <- lift $ query "SELECT * FROM article WHERE id = ?" (Only id)
+    C.putPromise promise articles >> C.codeGen outputChildren
+
+singleArticleSplices :: Monad n => Splices (RuntimeSplice n Article -> C.Splice n)
+singleArticleSplices = mapV (C.pureSplice . C.textSplice) $ do
+        "articleId" ## T.pack . show . articleId
+        "articleTitle" ## title
+        "articleContent" ## markdownToHtml . content
+        "articleCreation" ## presentTime . created_at
+
+singleArticleSplice :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
+singleArticleSplice = "article" ## singleArticleSpliceLookup
+
 markdownToHtml :: T.Text -> T.Text
 markdownToHtml = pandocToHtml . markdownToPandoc
 
@@ -71,26 +91,7 @@ articlesSplice :: (HasPostgres n, Monad n) => Splices (C.Splice n)
 articlesSplice = "articles" ## allArticlesSplice
 
 allCompiledSplices :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
-allCompiledSplices = mconcat [ articlesSplice ]
-
-getArticle :: Handler App App ()
-getArticle = do
-  articleId <- getParam "id"
-  articles <- query "SELECT * FROM article WHERE id = ?" (Only articleId)
-  renderWithSplices "article" $ singleArticleSplice $ head articles
-
-singleArticleSplice :: Article -> Splices (SnapletISplice App)
-singleArticleSplice a = "article" ## (renderArticles [a])
-
-renderArticles :: [Article] -> SnapletISplice App
-renderArticles = I.mapSplices $ I.runChildrenWith . splicesFromArticle
-
-splicesFromArticle :: Monad n => Article -> Splices (I.Splice n)
-splicesFromArticle a = do
-  "articleId" ## I.textSplice $ T.pack $ show $ articleId a
-  "articleTitle" ## I.textSplice $ title a
-  "articleContent" ## I.textSplice $ markdownToHtml $ content a
-  "articleCreation" ## I.textSplice $ presentTime $ created_at a
+allCompiledSplices = mconcat [ articlesSplice, singleArticleSplice ]
 
 ------------------------------------------------------------------------------
 -- / Postgres
@@ -102,7 +103,7 @@ instance FromRow Article where
 -- | The application's routes.
 routes :: [(ByteString, Handler App App ())]
 routes = [ ("/", ifTop $ cRender "index")
-         , ("/articles/:id", getArticle)
+         , ("/articles/:id", cRender "article")
          , ("/static", serveDirectory "static")
          , ("/media", serveDirectory "media")
          , ("/rss", cRenderAs "application/rss+xml" "rss")
@@ -114,7 +115,6 @@ routes = [ ("/", ifTop $ cRender "index")
 -- | The application initializer.
 app :: SnapletInit App App
 app = makeSnaplet "app" "Pure nonsense." Nothing $ do
-    tz <- liftIO getCurrentTimeZone
     let hc = emptyHeistConfig
              & hcNamespace .~ ""
              & hcTemplateLocations .~ [loadTemplates "templates"]
