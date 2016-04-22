@@ -44,36 +44,33 @@ data Article = Article
   , created_at :: LocalTime
   }
 
-allArticlesSplice :: (HasPostgres n, Monad n) => C.Splice n
-allArticlesSplice = do
-  C.manyWithSplices C.runChildren articleSplices $
-    lift $ query_ "SELECT * FROM article ORDER BY created_at DESC"
-  where
-    articleSplices = do
-      mapV (C.pureSplice . C.textSplice) $ do
+
+articleSplices :: Monad n => Splices (RuntimeSplice n Article -> C.Splice n)
+articleSplices = mapV (C.pureSplice . C.textSplice) $ do
         "articleId" ## T.pack . show . articleId
         "articleTitle" ## title
         "articleContent" ## markdownToHtml . content
         "articleCreation" ## presentTime . created_at
 
-singleArticleSpliceLookup :: (HasPostgres n, MonadSnap n) => C.Splice n
-singleArticleSpliceLookup = do
+allArticlesSplice :: (HasPostgres n, Monad n) => C.Splice n
+allArticlesSplice = do
+  C.manyWithSplices C.runChildren articleSplices $
+    lift $ query_ "SELECT * FROM article ORDER BY created_at DESC"
+
+articlesSplice :: (HasPostgres n, Monad n) => Splices (C.Splice n)
+articlesSplice = "articles" ## allArticlesSplice
+
+articleSpliceById :: (HasPostgres n, MonadSnap n) => C.Splice n
+articleSpliceById = do
   promise <- C.newEmptyPromise
-  outputChildren <- C.manyWithSplices C.runChildren singleArticleSplices (C.getPromise promise)
+  outputChildren <- C.manyWithSplices C.runChildren articleSplices (C.getPromise promise)
   return $ C.yieldRuntime $ do
     id <- lift $ getParam "id"
     articles <- lift $ query "SELECT * FROM article WHERE id = ?" (Only id)
     C.putPromise promise articles >> C.codeGen outputChildren
 
-singleArticleSplices :: Monad n => Splices (RuntimeSplice n Article -> C.Splice n)
-singleArticleSplices = mapV (C.pureSplice . C.textSplice) $ do
-        "articleId" ## T.pack . show . articleId
-        "articleTitle" ## title
-        "articleContent" ## markdownToHtml . content
-        "articleCreation" ## presentTime . created_at
-
-singleArticleSplice :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
-singleArticleSplice = "article" ## singleArticleSpliceLookup
+articleSplice :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
+articleSplice = "article" ## articleSpliceById
 
 markdownToHtml :: T.Text -> T.Text
 markdownToHtml = pandocToHtml . markdownToPandoc
@@ -87,11 +84,8 @@ pandocToHtml = T.pack . writeHtmlString def
 presentTime :: LocalTime -> T.Text
 presentTime = T.pack . formatTime defaultTimeLocale "%B %d, %Y"
 
-articlesSplice :: (HasPostgres n, Monad n) => Splices (C.Splice n)
-articlesSplice = "articles" ## allArticlesSplice
-
 allCompiledSplices :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
-allCompiledSplices = mconcat [ articlesSplice, singleArticleSplice ]
+allCompiledSplices = mconcat [ articlesSplice, articleSplice ]
 
 ------------------------------------------------------------------------------
 -- / Postgres
