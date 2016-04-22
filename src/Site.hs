@@ -51,6 +51,7 @@ articleSplices = mapV (C.pureSplice . C.textSplice) $ do
         "articleTitle" ## title
         "articleContent" ## markdownToHtml . content
         "articleCreation" ## presentTime . created_at
+        "articleRss" ## rssTime . created_at
 
 allArticlesSplice :: (HasPostgres n, Monad n) => C.Splice n
 allArticlesSplice = do
@@ -83,6 +84,9 @@ pandocToHtml = T.pack . writeHtmlString def
 
 presentTime :: LocalTime -> T.Text
 presentTime = T.pack . formatTime defaultTimeLocale "%B %d, %Y"
+
+rssTime :: LocalTime -> T.Text
+rssTime = T.pack . formatTime defaultTimeLocale rfc822DateFormat
 
 allCompiledSplices :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
 allCompiledSplices = mconcat [ articlesSplice, articleSplice ]
