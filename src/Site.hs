@@ -86,7 +86,7 @@ presentTime :: LocalTime -> T.Text
 presentTime = T.pack . formatTime defaultTimeLocale "%B %d, %Y"
 
 rssTime :: LocalTime -> T.Text
-rssTime = T.pack . formatTime defaultTimeLocale rfc822DateFormat
+rssTime t = T.pack $ (formatTime defaultTimeLocale rfc822DateFormat t) ++ "+0000"
 
 allCompiledSplices :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
 allCompiledSplices = mconcat [ articlesSplice, articleSplice ]
