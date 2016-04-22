@@ -62,6 +62,10 @@ div {
     font-size: large;
 }
 
+#header a {
+    text-decoration: none;
+}
+
 #content {
     margin-left: 2%;
     width: 96%;

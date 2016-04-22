@@ -11,7 +11,7 @@
   </head>
   <body>
     <div id="header">
-      <p>Serendipitous</p>
+      <p><a href="/">Serendipitous</a></p>
     </div>
     <div id="content">
 
