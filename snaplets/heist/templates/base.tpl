@@ -12,6 +12,7 @@
   <body>
     <div id="header">
       <p><a href="/">Serendipitous</a></p>
+      <p><a href="/">About</a></p>
     </div>
     <div id="content">
 

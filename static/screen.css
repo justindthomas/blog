@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 html {
     padding: 0;
     margin: 0;
@@ -10,9 +14,23 @@ body {
     margin: 0;
 }
 
-p {
+h1, h2, h3, h4, h5, h6 {
+    position: relative;
+    float: left;
+    clear: left;
+}
+
+p, div, pre > code, img, audio {
+    position: relative;
+    float: left;
+    clear: left;
     margin: 0;
     padding: 0;
+    width: 100%;
+}
+
+pre > code {
+    margin-bottom: 1em;
 }
 
 a {
@@ -25,8 +43,6 @@ a:hover {
 }
 
 img {
-    position: relative;
-    float: left;
     border: none;
     max-width: 100%;
     height: auto;
@@ -35,15 +51,7 @@ img {
 }
 
 audio {
-    position: relative;
-    float: left;
     margin-top: 1em;
-}
-
-div {
-    position: relative;
-    float: left;
-    box-sizing: border-box;
 }
 
 #header {
@@ -52,16 +60,21 @@ div {
     width: 100%;
     margin: 0;
     padding: 0;
-    background: #EBECED;
-    border-bottom: 1px solid #6E7E88;
+    background: #FFFFFF;
+    border-bottom: 1px solid #EBECED;
     z-index: 999;
 }
 
 #header p {
-    position: relative;
+    width: 50%;
     margin-bottom: 0;
     padding: 0.5em;
-    font-size: large;
+    font-size: small;
+}
+
+#header > p:last-child {
+    text-align: right;
+    clear: none;
 }
 
 #header a {
@@ -79,12 +92,15 @@ div {
 }
 
 #content > div {
-    clear: left;
     padding-bottom: 1em;
     margin-bottom: 1em;
-    width: 100%;
     background: #FFFFFF;
-    border-bottom: 2px solid #6E7E88;
+    border-bottom: 2px solid #EBECED;
+    text-align: left;
+}
+
+#content > div:last-child {
+    border-bottom: 0;
 }
 
 #content > div:first-child {
@@ -100,6 +116,10 @@ div {
 }
 
 .creation {
+    clear: none;
+}
+
+.creation > p {
     text-align: right;
     float: right;
     border-radius: 0 5px 0 0;
@@ -112,6 +132,7 @@ div {
     padding-left: 1em;
     padding-right: 1em;
     padding-bottom: 1em;
+    text-align: left;
 }
 
 .article > p {
