@@ -1,7 +1,7 @@
 html {
     padding: 0;
     margin: 0;
-    background-color: #eeeeee;
+    background-color: #BBC0C3;
     font-family: Verdana, Helvetica, sans-serif;
 }
 
@@ -17,12 +17,11 @@ p {
 
 a {
     text-decoration: underline;
-    color: black;
+    color: #6E7E88;
 }
 
 a:hover {
     cursor: pointer;
-    background-color: lightyellow;
 }
 
 img {
@@ -53,21 +52,21 @@ div {
     width: 100%;
     margin: 0;
     padding: 0;
-    background: #fff;
-    border-bottom: 1px solid #ddd;
-    opacity: 0.95;
+    background: #EBECED;
+    border-bottom: 1px solid #6E7E88;
     z-index: 999;
 }
 
 #header p {
     position: relative;
     margin-bottom: 0;
-    padding: 0.5em;
+    padding: 0.75em;
     font-size: large;
 }
 
 #header a {
     text-decoration: none;
+    color: #506774;
 }
 
 #content {
@@ -83,13 +82,13 @@ div {
     clear: left;
     padding: 0;
     margin-bottom: 1em;
-    border: 1px solid #ddd;
+    border: 1px solid #6E7E88;
     background: #fff;
     border-radius: 5px;
 }
 
 #content > div:first-child {
-    margin-top: 50px;
+    margin-top: 4em;
 }
 
 .creation, .title {
@@ -98,7 +97,7 @@ div {
     padding: 1em;
     color: #333;
     border-radius: 5px 0 0 0;
-    color: #999;
+    color: #6E7E88;
 }
 
 .creation {
