@@ -60,8 +60,8 @@ audio {
     width: 100%;
     margin: 0;
     padding: 0;
-    background: #FFFFFF;
-    border-bottom: 1px solid #EBECED;
+    background: #506774;
+    border-bottom: 1px solid #8D989E;
     z-index: 999;
 }
 
@@ -79,7 +79,7 @@ audio {
 
 #header a {
     text-decoration: none;
-    color: #506774;
+    color: #EBECED;
 }
 
 #content {
@@ -104,7 +104,7 @@ audio {
 }
 
 #content > div:first-child {
-    margin-top: 3em;
+    margin-top: 2em;
 }
 
 .creation, .title {
