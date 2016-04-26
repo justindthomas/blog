@@ -48,16 +48,20 @@ div {
 }
 
 #header {
-    position: relative;
-    float: left;
+    position: fixed;
+    top: 0px;
     width: 100%;
     margin: 0;
     padding: 0;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    opacity: 0.95;
+    z-index: 999;
 }
 
 #header p {
     position: relative;
-    margin-bottom: 0.5em;
+    margin-bottom: 0;
     padding: 0.5em;
     font-size: large;
 }
@@ -82,6 +86,10 @@ div {
     border: 1px solid #ddd;
     background: #fff;
     border-radius: 5px;
+}
+
+#content > div:first-child {
+    margin-top: 50px;
 }
 
 .creation, .title {
