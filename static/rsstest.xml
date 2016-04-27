@@ -1,0 +1,36 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <atom:link href='https://ser.endipito.us/rss.xml' rel='self' type='application/rss+xml'/>
+    <title>Serendipitous Articles</title>
+    <link>https://ser.endipito.us/</link>
+    <description>Unfiltered Noise</description>
+    <item>
+      <title>Web Security</title>
+      <link>https://ser.endipito.us/articles/45</link>
+      <guid>https://ser.endipito.us/articles/45</guid>
+      <pubDate>Tue, 19 Apr 2016 04:54:46 +0000</pubDate>
+      <description>No description provided.</description>
+    </item>
+    <item>
+      <title>Leisure</title>
+      <link>https://ser.endipito.us/articles/44</link>
+      <guid>https://ser.endipito.us/articles/44</guid>
+      <pubDate>Mon, 18 Apr 2016 04:56:56 +0000</pubDate>
+      <description>No description provided.</description>
+    </item>
+    <item>
+      <title>Music Composition</title>
+      <link>https://ser.endipito.us/articles/43</link>
+      <guid>https://ser.endipito.us/articles/43</guid>
+      <pubDate>Mon, 18 Apr 2016 04:35:40 +0000</pubDate>
+      <description>No description provided.</description>
+    </item>
+    <item>
+      <title>Adventures in Haskell</title>
+      <link>https://ser.endipito.us/articles/34</link>
+      <guid>https://ser.endipito.us/articles/34</guid>
+      <pubDate>Wed,  6 Apr 2016 03:17:32 +0000</pubDate>
+      <description>No description provided.</description>
+    </item>
+  </channel>
+</rss>

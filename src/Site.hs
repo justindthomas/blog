@@ -16,7 +16,6 @@ import           Database.PostgreSQL.Simple.FromRow
 import           Database.PostgreSQL.Simple.Time
 import           Data.Time
 import           Data.Time.Format
-import           System.Locale
 import           Data.ByteString (ByteString)
 import           Data.Monoid
 import qualified Data.Text as T
