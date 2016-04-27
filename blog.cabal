@@ -40,7 +40,8 @@ Executable blog
     transformers              >= 0.4     && < 0.5,
     either                    >= 4.4     && < 4.5,
     map-syntax                >= 0.2     && < 0.3,
-    pandoc
+    pandoc,
+    old-locale
         
   if flag(old-base)
     build-depends:
