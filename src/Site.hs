@@ -15,7 +15,7 @@ import           Control.Monad.Trans
 import           Database.PostgreSQL.Simple.FromRow
 import           Database.PostgreSQL.Simple.Time
 import           Data.Time
-import           Data.Time.Format
+import qualified Data.Time.Format as F
 import           Data.ByteString (ByteString)
 import           Data.Monoid
 import qualified Data.Text as T
@@ -86,7 +86,7 @@ presentTime :: LocalTime -> T.Text
 presentTime = T.pack . formatTime defaultTimeLocale "%B %d, %Y"
 
 rssTime :: LocalTime -> T.Text
-rssTime t = T.pack $ (formatTime defaultTimeLocale rfc822DateFormat t) ++ "+0000"
+rssTime t = T.pack $ (F.formatTime F.defaultTimeLocale F.rfc822DateFormat t) ++ "+0000"
 
 allCompiledSplices :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
 allCompiledSplices = mconcat [ articlesSplice, articleSplice ]
