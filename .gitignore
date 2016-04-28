@@ -7,3 +7,4 @@ dist
 credentials
 *.mp3
 .DS_Store
+media/*
