@@ -15,9 +15,7 @@
       <p><a href="/">About</a></p>
     </div>
     <div id="content">
-
       <apply-content/>
-
     </div>
   </body>
 </html>
