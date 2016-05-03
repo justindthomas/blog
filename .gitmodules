@@ -1,0 +1,3 @@
+[submodule "xmlhtml"]
+	path = extra/xmlhtml
+	url = git@github.com:justindthomas/xmlhtml.git
