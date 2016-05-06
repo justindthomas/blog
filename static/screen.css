@@ -68,7 +68,7 @@ audio {
 #header p {
     width: 50%;
     margin-bottom: 0;
-    padding: 0.5em;
+    padding: 0.5em 2em;
 }
 
 #header > p:last-child {
@@ -82,8 +82,9 @@ audio {
 }
 
 #content {
-    margin-left: 3%;
-    width: 94%;
+    margin-left: 10%;
+    width: 80%;
+    min-width: 40em;
 }
 
 #content div {

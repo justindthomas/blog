@@ -104,7 +104,7 @@ routes = [ ("/", ifTop $ cRender "index")
          , ("/articles/:id", cRender "article")
          , ("/static", serveDirectory "static")
          , ("/media", serveDirectory "media")
-         , ("/rss.xml", cRenderAs "application/rss+xml" "rss")
+         , ("/rss", cRenderAs "application/rss+xml" "rss")
          , ("/favicon.ico", serveFile "static/favicon.ico")
          ]
 
