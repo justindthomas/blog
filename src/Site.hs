@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE GADTs, TypeFamilies, TemplateHaskell, QuasiQuotes, FlexibleInstances, StandaloneDeriving, AllowAmbiguousTypes, EmptyDataDecls #-}
+{-# LANGUAGE GADTs, TypeFamilies, TemplateHaskell, QuasiQuotes, FlexibleInstances, StandaloneDeriving, AllowAmbiguousTypes #-}
 
 ------------------------------------------------------------------------------
 -- | This module is where all the routes and handlers are defined for your
@@ -57,12 +57,19 @@ definitions:
   - entity: Article
     dbName: article
     autoKey: null
+    keys:
+      - name: Reference
+        default: true
     constructors:
       - name: Article
         fields:
           - name: created_at
             dbname: created_at
             default: "now()"
+        uniques:
+          - name: Reference
+            type: primary
+            fields: [reference]
 |]
 
 articleSplices :: Monad n => Splices (RuntimeSplice n Article -> C.Splice n)
