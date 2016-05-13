@@ -45,23 +45,33 @@ import           Database.Groundhog.Postgresql
 import           Application
 
 data Article = Article {
-  articleId  :: Int,
+  reference  :: T.Text,
   title      :: T.Text,
+  summary    :: T.Text,
   content    :: T.Text,
   created_at :: ZonedTime
 } deriving Show
 
 mkPersist defaultCodegenConfig [groundhog|
-- entity: Article
+definitions:
+  - entity: Article
+    dbName: article
+    constructors:
+      - name: Article
+        fields:
+          - name: created_at
+            dbname: created_at
+            default: "now()"
 |]
 
 articleSplices :: Monad n => Splices (RuntimeSplice n Article -> C.Splice n)
 articleSplices = mapV (C.pureSplice . C.textSplice) $ do
-        "articleId" ## T.pack . show . articleId
-        "articleTitle" ## title
-        "articleContent" ## markdownToHtml . content
-        "articleCreation" ## presentTime . created_at
-        "articleRss" ## rssTime . created_at
+        "articleReference" ## reference
+        "articleTitle"     ## title
+        "articleSummary"   ## summary
+        "articleContent"   ## markdownToHtml . content
+        "articleCreation"  ## presentTime . created_at
+        "articleRss"       ## rssTime . created_at
 
 allArticlesSplice :: (HasPostgres n, Monad n) => C.Splice n
 allArticlesSplice = do
@@ -105,7 +115,7 @@ allCompiledSplices = mconcat [ articlesSplice, articleSplice ]
 -- / Postgres
 
 instance FromRow Article where
-    fromRow = Article <$> field <*> field <*> field <*> field
+    fromRow = Article <$> field <*> field <*> field <*> field <*> field
 
 ------------------------------------------------------------------------------
 -- | The application's routes.
