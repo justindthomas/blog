@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE GADTs, TypeFamilies, TemplateHaskell, QuasiQuotes, FlexibleInstances, StandaloneDeriving, AllowAmbiguousTypes #-}
+{-# LANGUAGE GADTs, TypeFamilies, TemplateHaskell, QuasiQuotes, FlexibleInstances, StandaloneDeriving, AllowAmbiguousTypes, EmptyDataDecls #-}
 
 ------------------------------------------------------------------------------
 -- | This module is where all the routes and handlers are defined for your
@@ -56,6 +56,7 @@ mkPersist defaultCodegenConfig [groundhog|
 definitions:
   - entity: Article
     dbName: article
+    autoKey: null
     constructors:
       - name: Article
         fields:
@@ -86,8 +87,8 @@ articleSpliceById = do
   promise <- C.newEmptyPromise
   outputChildren <- C.manyWithSplices C.runChildren articleSplices (C.getPromise promise)
   return $ C.yieldRuntime $ do
-    id <- lift $ getParam "id"
-    articles <- lift $ query "SELECT * FROM Article WHERE id = ?" (Only id)
+    ref <- lift $ getParam "reference"
+    articles <- lift $ query "SELECT * FROM article WHERE reference = ?" (Only ref)
     C.putPromise promise articles >> C.codeGen outputChildren
 
 articleSplice :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
@@ -121,7 +122,7 @@ instance FromRow Article where
 -- | The application's routes.
 routes :: [(ByteString, Handler App App ())]
 routes = [ ("/", ifTop $ cRender "index")
-         , ("/articles/:id", cRender "article")
+         , ("/articles/:reference", cRender "article")
          , ("/static", serveDirectory "static")
          , ("/media", serveDirectory "media")
          , ("/rss", cRenderAs "application/rss+xml" "rss")
