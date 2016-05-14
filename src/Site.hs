@@ -44,6 +44,15 @@ import           Database.Groundhog.Postgresql
 ------------------------------------------------------------------------------
 import           Application
 
+data PGArticle = PGArticle {
+  pg_id         :: Int,
+  pg_reference  :: T.Text,
+  pg_title      :: T.Text,
+  pg_summary    :: T.Text,
+  pg_content    :: T.Text,
+  pg_created_at :: ZonedTime
+} deriving Show
+
 data Article = Article {
   reference  :: T.Text,
   title      :: T.Text,
@@ -56,10 +65,8 @@ mkPersist defaultCodegenConfig [groundhog|
 definitions:
   - entity: Article
     dbName: article
-    autoKey: null
     keys:
       - name: Reference
-        default: true
     constructors:
       - name: Article
         fields:
@@ -68,18 +75,17 @@ definitions:
             default: "now()"
         uniques:
           - name: Reference
-            type: primary
             fields: [reference]
 |]
 
-articleSplices :: Monad n => Splices (RuntimeSplice n Article -> C.Splice n)
+articleSplices :: Monad n => Splices (RuntimeSplice n PGArticle -> C.Splice n)
 articleSplices = mapV (C.pureSplice . C.textSplice) $ do
-        "articleReference" ## reference
-        "articleTitle"     ## title
-        "articleSummary"   ## summary
-        "articleContent"   ## markdownToHtml . content
-        "articleCreation"  ## presentTime . created_at
-        "articleRss"       ## rssTime . created_at
+        "articleReference" ## pg_reference
+        "articleTitle"     ## pg_title
+        "articleSummary"   ## pg_summary
+        "articleContent"   ## markdownToHtml . pg_content
+        "articleCreation"  ## presentTime . pg_created_at
+        "articleRss"       ## rssTime . pg_created_at
 
 allArticlesSplice :: (HasPostgres n, Monad n) => C.Splice n
 allArticlesSplice = do
@@ -122,8 +128,8 @@ allCompiledSplices = mconcat [ articlesSplice, articleSplice ]
 ------------------------------------------------------------------------------
 -- / Postgres
 
-instance FromRow Article where
-    fromRow = Article <$> field <*> field <*> field <*> field <*> field
+instance FromRow PGArticle where
+    fromRow = PGArticle <$> field <*> field <*> field <*> field <*> field <*> field
 
 ------------------------------------------------------------------------------
 -- | The application's routes.
