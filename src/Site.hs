@@ -66,7 +66,7 @@ definitions:
   - entity: Article
     dbName: article
     keys:
-      - name: Reference
+      - name: reference_uniq
     constructors:
       - name: Article
         fields:
@@ -74,7 +74,7 @@ definitions:
             dbname: created_at
             default: "now()"
         uniques:
-          - name: Reference
+          - name: reference_uniq
             fields: [reference]
 |]
 
