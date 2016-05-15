@@ -10,7 +10,7 @@
         <link>https://ser.endipito.us/articles/<articleId/></link>
         <guid>https://ser.endipito.us/articles/<articleId/></guid>
         <pubDate><articleRss/></pubDate>
-        <description>No description provided.</description>
+        <description><articleSummary/></description>
       </item>
     </articles>
   </channel>
