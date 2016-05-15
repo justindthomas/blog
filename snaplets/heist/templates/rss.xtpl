@@ -7,8 +7,8 @@
     <articles>
       <item>
         <title><articleTitle/></title>
-        <link>https://ser.endipito.us/articles/<articleId/></link>
-        <guid>https://ser.endipito.us/articles/<articleId/></guid>
+        <link>https://ser.endipito.us/articles/<articleReference/></link>
+        <guid>https://ser.endipito.us/articles/<articleReference/></guid>
         <pubDate><articleRss/></pubDate>
         <description><articleSummary/></description>
       </item>
