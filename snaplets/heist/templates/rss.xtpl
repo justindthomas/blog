@@ -4,11 +4,16 @@
     <title>Serendipitous Articles</title>
     <link>https://ser.endipito.us/</link>
     <description>Unfiltered Noise</description>
+    <image>
+      <url>https://ser.endipito.us/static/favicon.png</url>
+      <title>Serendipitous Articles</title>
+      <link>https://ser.endipito.us/</link>
+    </image>
     <articles>
       <item>
         <title><articleTitle/></title>
         <link>https://ser.endipito.us/articles/<articleReference/></link>
-        <guid>https://ser.endipito.us/articles/<articleReference/></guid>
+        <guid isPermaLink="true">https://ser.endipito.us/articles/<articleReference/></guid>
         <pubDate><articleRss/></pubDate>
         <description><articleSummary/></description>
       </item>
