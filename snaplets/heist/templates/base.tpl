@@ -3,7 +3,7 @@
   <head>
     <title>Serendipitous</title>
     <link rel="stylesheet" type="text/css" href="/static/screen.css"/>
-    <link rel="stylesheet" href="/static/styles/solarized-dark.css">
+    <link rel="stylesheet" href="/static/styles/tomorrow-night-blue.css">
     <link href="/rss" rel="alternate" type="application/rss+xml" title="Serendipitous Articles" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="/static/highlight.pack.js"></script>
