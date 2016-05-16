@@ -1,6 +1,6 @@
 # Splicing via Parameter
 
-A couple of weeks ago I was attempting to add functionatlity to this site to permit the retrieval of articles individually. I found it challenging to locate any working examples where data from an HTTP parameter is used to form a query to pull down results from a database to be used in a compiled splice. Here's what I eventually came up with:
+A couple of weeks ago I was attempting to add functionality to this site to permit the retrieval of articles individually. I found it challenging to locate any working examples where data from an HTTP parameter is used to form a query to pull down results from a database to be used in a compiled splice. Here's what I eventually came up with:
 
 ~~~~ {.haskell}
 articleSpliceById :: (HasPostgres n, MonadSnap n) => C.Splice n
