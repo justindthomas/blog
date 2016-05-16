@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE GADTs, TypeFamilies, TemplateHaskell, QuasiQuotes, FlexibleInstances, StandaloneDeriving, AllowAmbiguousTypes #-}
+{-# LANGUAGE GADTs, TypeFamilies, TemplateHaskell, QuasiQuotes, FlexibleInstances, StandaloneDeriving, AllowAmbiguousTypes, FlexibleContexts #-}
 
 ------------------------------------------------------------------------------
 -- | This module is where all the routes and handlers are defined for your
@@ -14,11 +14,11 @@ import           Control.Applicative
 import           Control.Lens
 import           Control.Monad.Trans
 import           Control.Monad.Logger
-import           Database.PostgreSQL.Simple.FromRow
-import           Database.PostgreSQL.Simple.Time
+import           Data.Maybe
 import           Data.Time
 import           Data.Time.Format
 import           Data.ByteString (ByteString)
+import qualified Data.ByteString.Char8 as B
 import qualified Data.Configurator as C
 import           Data.Monoid
 import qualified Data.Text as T
@@ -28,7 +28,6 @@ import           Snap.Snaplet
 import           Snap.Snaplet.Heist
 import           Snap.Snaplet.Session.Backends.CookieSession
 import           Snap.Util.FileServe
-import           Snap.Snaplet.PostgresqlSimple
 import           Heist
 import qualified Heist.Compiled as C
 import qualified Heist.Compiled.LowLevel as C
@@ -41,17 +40,9 @@ import qualified Database.Groundhog as G
 import           Database.Groundhog.Core
 import           Database.Groundhog.TH
 import           Database.Groundhog.Postgresql
+import           Snap.Snaplet.PostgresqlSimple (getConnectionString)
 ------------------------------------------------------------------------------
 import           Application
-
-data PGArticle = PGArticle {
-  pg_id         :: Int,
-  pg_reference  :: T.Text,
-  pg_title      :: T.Text,
-  pg_summary    :: T.Text,
-  pg_content    :: T.Text,
-  pg_created_at :: ZonedTime
-} deriving Show
 
 data Article = Article {
   reference  :: T.Text,
@@ -78,34 +69,44 @@ definitions:
             fields: [reference]
 |]
 
-articleSplices :: Monad n => Splices (RuntimeSplice n PGArticle -> C.Splice n)
+articleSplices :: MonadSnap n => Splices (RuntimeSplice n Article -> C.Splice n)
 articleSplices = mapV (C.pureSplice . C.textSplice) $ do
-        "articleReference" ## pg_reference
-        "articleTitle"     ## pg_title
-        "articleSummary"   ## pg_summary
-        "articleContent"   ## markdownToHtml . pg_content
-        "articleCreation"  ## presentTime . pg_created_at
-        "articleRss"       ## rssTime . pg_created_at
-
-allArticlesSplice :: (HasPostgres n, Monad n) => C.Splice n
+        "articleReference" ## reference
+        "articleTitle"     ## title
+        "articleSummary"   ## summary
+        "articleContent"   ## markdownToHtml . content
+        "articleCreation"  ## presentTime . created_at
+        "articleRss"       ## rssTime . created_at
+        
+allArticlesSplice :: C.Splice (Handler App App)
 allArticlesSplice = do
   C.manyWithSplices C.runChildren articleSplices $
-    lift $ query_ "SELECT * FROM article ORDER BY created_at DESC"
+    lift $ getAllArticles
 
-articlesSplice :: (HasPostgres n, Monad n) => Splices (C.Splice n)
+getAllArticles :: Handler App App [Article]
+getAllArticles = do
+  results <- runGH $ select $ CondEmpty `orderBy` [Desc Created_atField]
+  return results
+
+getSingleArticle :: String -> Handler App App Article
+getSingleArticle k = do
+  results <- runGH $ select $ (ReferenceField ==. (T.pack k)) `limitTo` 1
+  return $ head results
+
+articlesSplice :: Splices (C.Splice (Handler App App))
 articlesSplice = "articles" ## allArticlesSplice
 
-articleSpliceById :: (HasPostgres n, MonadSnap n) => C.Splice n
-articleSpliceById = do
+articleSpliceByReference :: C.Splice (Handler App App)
+articleSpliceByReference = do
   promise <- C.newEmptyPromise
   outputChildren <- C.manyWithSplices C.runChildren articleSplices (C.getPromise promise)
   return $ C.yieldRuntime $ do
     ref <- lift $ getParam "reference"
-    articles <- lift $ query "SELECT * FROM article WHERE reference = ?" (Only ref)
-    C.putPromise promise articles >> C.codeGen outputChildren
+    articles <- lift $ getSingleArticle $ B.unpack $ fromMaybe "" ref
+    C.putPromise promise [articles] >> C.codeGen outputChildren
 
-articleSplice :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
-articleSplice = "article" ## articleSpliceById
+articleSplice :: Splices (C.Splice (Handler App App))
+articleSplice = "article" ## articleSpliceByReference
 
 markdownToHtml :: T.Text -> T.Text
 markdownToHtml = pandocToHtml . markdownToPandoc
@@ -120,16 +121,10 @@ presentTime :: ZonedTime -> T.Text
 presentTime = T.pack . formatTime defaultTimeLocale "%B %d, %Y"
 
 rssTime :: ZonedTime -> T.Text
-rssTime t = T.pack $ (formatTime defaultTimeLocale rfc822DateFormat t)
+rssTime t = T.pack $ (formatTime defaultTimeLocale "%a, %d %b %0Y %H:%M:%S %z" t)
 
-allCompiledSplices :: (HasPostgres n, MonadSnap n) => Splices (C.Splice n)
+allCompiledSplices :: Splices (C.Splice (Handler App App))
 allCompiledSplices = mconcat [ articlesSplice, articleSplice ]
-
-------------------------------------------------------------------------------
--- / Postgres
-
-instance FromRow PGArticle where
-    fromRow = PGArticle <$> field <*> field <*> field <*> field <*> field <*> field
 
 ------------------------------------------------------------------------------
 -- | The application's routes.
@@ -141,7 +136,6 @@ routes = [ ("/", ifTop $ cRender "index")
          , ("/rss", cRenderAs "application/rss+xml" "rss")
          , ("/favicon.ico", serveFile "static/favicon.ico")
          ]
-
 
 ------------------------------------------------------------------------------
 -- | The application initializer.
@@ -155,7 +149,6 @@ app = makeSnaplet "app" "Pure nonsense." Nothing $ do
     h <- nestSnaplet "" heist $ heistInit' "templates" hc
     s <- nestSnaplet "sess" sess $
            initCookieSessionManager "site_key.txt" "sess" (Just 3600)
-    d <- nestSnaplet "pg" pg pgsInit
     addRoutes routes
 
     cfg <- getSnapletUserConfig
@@ -166,8 +159,9 @@ app = makeSnaplet "app" "Pure nonsense." Nothing $ do
     liftIO $ print connstr
     liftIO $ runNoLoggingT (withConn (runDbPersist migrateDB) p)
 
-    return $ App h s d
+    return $ App h s p
 
 migrateDB :: (MonadIO m, PersistBackend m) => m ()
 migrateDB = runMigration $ do
       G.migrate (undefined :: Article)
+

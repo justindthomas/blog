@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE FlexibleInstances,MultiParamTypeClasses #-}
 
 ------------------------------------------------------------------------------
 -- | This module defines our application's state type and an alias for its
@@ -9,30 +9,38 @@ module Application where
 ------------------------------------------------------------------------------
 
 import           Control.Monad.Reader
-import           Control.Monad.State
+import qualified Control.Monad.State as M
+import           Control.Monad.Logger
 import           Control.Lens
 import           Snap
 import           Snap.Snaplet.Heist
 import           Snap.Snaplet.PostgresqlSimple
 import           Snap.Snaplet.Session
+import           Data.Pool
+import           Database.Groundhog.Core
+import           Database.Groundhog.TH
+import           Database.Groundhog.Postgresql
 
 ------------------------------------------------------------------------------
 data App = App
     { _heist :: Snaplet (Heist App)
-    , _sess :: Snaplet SessionManager
-    , _pg :: Snaplet Postgres 
+    , _sess  :: Snaplet SessionManager
+    , _gh    :: Pool Postgresql
     }
 
 makeLenses ''App
 
-instance HasPostgres (Handler b App) where
-    getPostgresState = with pg get
-    setLocalPostgresState s = local (set (pg . snapletValue) s)
-
 instance HasHeist App where
     heistLens = subSnaplet heist
 
+instance ConnectionManager App Postgresql where 
+  withConn f app = withConn f (_gh app) 
+  withConnNoTransaction f app = withConnNoTransaction f (_gh app) 
+    
 ------------------------------------------------------------------------------
 type AppHandler = Handler App App
 
-
+runGH :: ConnectionManager b conn => DbPersist conn (NoLoggingT IO) a -> Handler b v a 
+runGH f = withTop' id $ do 
+    cm <- ask 
+    liftIO $ runNoLoggingT (withConn (runDbPersist f) cm)
