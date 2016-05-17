@@ -49,7 +49,8 @@ data Article = Article {
   title      :: T.Text,
   summary    :: T.Text,
   content    :: T.Text,
-  created_at :: ZonedTime
+  frontPage  :: Bool,
+  createdAt :: ZonedTime
 } deriving Show
 
 mkPersist defaultCodegenConfig [groundhog|
@@ -61,8 +62,8 @@ definitions:
     constructors:
       - name: Article
         fields:
-          - name: created_at
-            dbname: created_at
+          - name: createdAt
+            dbname: createdAt
             default: "now()"
         uniques:
           - name: reference_uniq
@@ -75,8 +76,8 @@ articleSplices = mapV (C.pureSplice . C.textSplice) $ do
         "articleTitle"     ## title
         "articleSummary"   ## summary
         "articleContent"   ## markdownToHtml . content
-        "articleCreation"  ## presentTime . created_at
-        "articleRss"       ## rssTime . created_at
+        "articleCreation"  ## presentTime . createdAt
+        "articleRss"       ## rssTime . createdAt
         
 allArticlesSplice :: C.Splice (Handler App App)
 allArticlesSplice = do
@@ -85,7 +86,7 @@ allArticlesSplice = do
 
 getAllArticles :: Handler App App [Article]
 getAllArticles = do
-  results <- runGH $ select $ CondEmpty `orderBy` [Desc Created_atField]
+  results <- runGH $ select $ CondEmpty `orderBy` [Desc CreatedAtField]
   return results
 
 getSingleArticle :: String -> Handler App App Article
