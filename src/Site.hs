@@ -50,7 +50,7 @@ data Article = Article {
   summary    :: T.Text,
   content    :: T.Text,
   frontPage  :: Bool,
-  createdAt :: ZonedTime
+  createdAt  :: ZonedTime
 } deriving Show
 
 mkPersist defaultCodegenConfig [groundhog|
@@ -63,8 +63,11 @@ definitions:
       - name: Article
         fields:
           - name: createdAt
-            dbname: createdAt
+            dbName: created_at
             default: "now()"
+          - name: frontPage
+            dbName: front_page
+            default: "true"
         uniques:
           - name: reference_uniq
             fields: [reference]
