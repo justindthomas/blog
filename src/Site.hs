@@ -89,7 +89,7 @@ allArticlesSplice = do
 
 getAllArticles :: Handler App App [Article]
 getAllArticles = do
-  results <- runGH $ select $ CondEmpty `orderBy` [Desc CreatedAtField]
+  results <- runGH $ select $ (FrontPageField ==. True) `orderBy` [Desc CreatedAtField]
   return results
 
 getSingleArticle :: String -> Handler App App Article
