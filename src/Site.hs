@@ -10,19 +10,16 @@ module Site
   ) where
 
 ------------------------------------------------------------------------------
-import           Control.Applicative
 import           Control.Lens
 import           Control.Monad.Trans
 import           Control.Monad.Logger
 import           Data.Maybe
 import           Data.Time
-import           Data.Time.Format
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString.Char8 as B
 import qualified Data.Configurator as C
-import           Data.Monoid
 import qualified Data.Text as T
-import           Data.Text.Encoding (encodeUtf8,decodeUtf8)
+import           Data.Text.Encoding (decodeUtf8)
 import           Snap.Core
 import           Snap.Snaplet
 import           Snap.Snaplet.Heist
@@ -31,11 +28,8 @@ import           Snap.Util.FileServe
 import           Heist
 import qualified Heist.Compiled as C
 import qualified Heist.Compiled.LowLevel as C
-import qualified Heist.Interpreted as I
-import qualified Data.Text.Lazy as L
 import           Text.Pandoc
 import           Text.Pandoc.Error (handleError)
-import           Control.Monad.IO.Class (liftIO)
 import qualified Database.Groundhog as G
 import           Database.Groundhog.Core
 import           Database.Groundhog.TH
@@ -50,27 +44,55 @@ data Article = Article {
   summary    :: T.Text,
   content    :: T.Text,
   frontPage  :: Bool,
-  createdAt  :: ZonedTime
+  createdAt  :: ZonedTime,
+  prev       :: T.Text,
+  next       :: T.Text
+} deriving Show
+
+data ArticleMigration = ArticleMigration {
+  referenceM :: T.Text,
+  titleM     :: T.Text,
+  summaryM   :: T.Text,
+  contentM   :: T.Text,
+  frontPageM :: Bool,
+  createdAtM :: ZonedTime
 } deriving Show
 
 mkPersist defaultCodegenConfig [groundhog|
 definitions:
-  - entity: Article
+  - entity: ArticleMigration
     dbName: article
     keys:
       - name: reference_uniq
+    constructors:
+      - name: ArticleMigration
+        fields:
+          - name: referenceM
+            dbName: reference
+          - name: titleM
+            dbName: title
+          - name: summaryM
+            dbName: summary
+          - name: contentM
+            dbName: content
+          - name: createdAtM
+            dbName: created_at
+            default: "now()"
+          - name: frontPageM
+            dbName: front_page
+            default: "true"
+        uniques:
+          - name: reference_uniq
+            fields: [referenceM]
+  - entity: Article
+    dbName: navigation
     constructors:
       - name: Article
         fields:
           - name: createdAt
             dbName: created_at
-            default: "now()"
           - name: frontPage
             dbName: front_page
-            default: "true"
-        uniques:
-          - name: reference_uniq
-            fields: [reference]
 |]
 
 articleSplices :: MonadSnap n => Splices (RuntimeSplice n Article -> C.Splice n)
@@ -81,26 +103,28 @@ articleSplices = mapV (C.pureSplice . C.textSplice) $ do
         "articleContent"   ## markdownToHtml . content
         "articleCreation"  ## presentTime . createdAt
         "articleRss"       ## rssTime . createdAt
+        "articlePrev"      ## prev
+        "articleNext"      ## next
         
-allArticlesSplice :: C.Splice (Handler App App)
+allArticlesSplice :: C.Splice (AppHandler)
 allArticlesSplice = do
   C.manyWithSplices C.runChildren articleSplices $
     lift $ getAllArticles
 
-getAllArticles :: Handler App App [Article]
+getAllArticles :: AppHandler [Article]
 getAllArticles = do
   results <- runGH $ select $ (FrontPageField ==. True) `orderBy` [Desc CreatedAtField]
   return results
 
-getSingleArticle :: String -> Handler App App Article
+getSingleArticle :: String -> AppHandler Article
 getSingleArticle k = do
   results <- runGH $ select $ (ReferenceField ==. (T.pack k)) `limitTo` 1
   return $ head results
-
-articlesSplice :: Splices (C.Splice (Handler App App))
+  
+articlesSplice :: Splices (C.Splice (AppHandler))
 articlesSplice = "articles" ## allArticlesSplice
 
-articleSpliceByReference :: C.Splice (Handler App App)
+articleSpliceByReference :: C.Splice (AppHandler)
 articleSpliceByReference = do
   promise <- C.newEmptyPromise
   outputChildren <- C.manyWithSplices C.runChildren articleSplices (C.getPromise promise)
@@ -109,7 +133,7 @@ articleSpliceByReference = do
     articles <- lift $ getSingleArticle $ B.unpack $ fromMaybe "" ref
     C.putPromise promise [articles] >> C.codeGen outputChildren
 
-articleSplice :: Splices (C.Splice (Handler App App))
+articleSplice :: Splices (C.Splice (AppHandler))
 articleSplice = "article" ## articleSpliceByReference
 
 markdownToHtml :: T.Text -> T.Text
@@ -127,14 +151,15 @@ presentTime = T.pack . formatTime defaultTimeLocale "%B %d, %Y"
 rssTime :: ZonedTime -> T.Text
 rssTime t = T.pack $ (formatTime defaultTimeLocale "%a, %d %b %0Y %H:%M:%S %z" t)
 
-allCompiledSplices :: Splices (C.Splice (Handler App App))
+allCompiledSplices :: Splices (C.Splice (AppHandler))
 allCompiledSplices = mconcat [ articlesSplice, articleSplice ]
 
 ------------------------------------------------------------------------------
 -- | The application's routes.
-routes :: [(ByteString, Handler App App ())]
+routes :: [(ByteString, AppHandler ())]
 routes = [ ("/", ifTop $ cRender "index")
          , ("/articles/:reference", cRender "article")
+         , ("/pages/:reference", cRender "page")
          , ("/static", serveDirectory "static")
          , ("/media", serveDirectory "media")
          , ("/rss", cRenderAs "application/rss+xml" "rss")
@@ -155,7 +180,6 @@ app = makeSnaplet "app" "Pure nonsense." Nothing $ do
            initCookieSessionManager "site_key.txt" "sess" (Just 3600)
     addRoutes routes
 
-    cfg <- getSnapletUserConfig
     cfg <- C.subconfig "postgresql-simple" <$> getSnapletUserConfig
 
     connstr <- liftIO $ decodeUtf8 <$> getConnectionString cfg
@@ -167,5 +191,5 @@ app = makeSnaplet "app" "Pure nonsense." Nothing $ do
 
 migrateDB :: (MonadIO m, PersistBackend m) => m ()
 migrateDB = runMigration $ do
-      G.migrate (undefined :: Article)
+      G.migrate (undefined :: ArticleMigration)
 

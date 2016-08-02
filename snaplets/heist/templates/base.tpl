@@ -12,7 +12,7 @@
   <body>
     <div id="header">
       <p><a href="/">Serendipitous</a></p>
-      <p><a href="/articles/about">About</a></p>
+      <p><a href="/pages/about">About</a></p>
     </div>
     <div id="content">
       <apply-content/>

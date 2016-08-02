@@ -9,16 +9,13 @@ module Application where
 ------------------------------------------------------------------------------
 
 import           Control.Monad.Reader
-import qualified Control.Monad.State as M
 import           Control.Monad.Logger
 import           Control.Lens
 import           Snap
 import           Snap.Snaplet.Heist
-import           Snap.Snaplet.PostgresqlSimple
 import           Snap.Snaplet.Session
 import           Data.Pool
 import           Database.Groundhog.Core
-import           Database.Groundhog.TH
 import           Database.Groundhog.Postgresql
 
 ------------------------------------------------------------------------------
@@ -44,3 +41,4 @@ runGH :: ConnectionManager b conn => DbPersist conn (NoLoggingT IO) a -> Handler
 runGH f = withTop' id $ do 
     cm <- ask 
     liftIO $ runNoLoggingT (withConn (runDbPersist f) cm)
+
