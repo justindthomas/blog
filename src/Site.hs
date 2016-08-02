@@ -116,6 +116,11 @@ getAllArticles = do
   results <- runGH $ select $ (FrontPageField ==. True) `orderBy` [Desc CreatedAtField]
   return results
 
+getLatestArticle :: AppHandler [Article]
+getLatestArticle = do
+  results <- runGH $ select $ (FrontPageField ==. True) `orderBy` [Desc CreatedAtField] `limitTo` 1
+  return results
+
 getSingleArticle :: String -> AppHandler Article
 getSingleArticle k = do
   results <- runGH $ select $ (ReferenceField ==. (T.pack k)) `limitTo` 1
@@ -136,6 +141,14 @@ articleSpliceByReference = do
 articleSplice :: Splices (C.Splice (AppHandler))
 articleSplice = "article" ## articleSpliceByReference
 
+latestSplices :: C.Splice (AppHandler)
+latestSplices = do
+  C.manyWithSplices C.runChildren articleSplices $
+    lift $ getLatestArticle
+  
+latestSplice :: Splices (C.Splice (AppHandler))
+latestSplice = "latest" ## latestSplices
+
 markdownToHtml :: T.Text -> T.Text
 markdownToHtml = pandocToHtml . markdownToPandoc
 
@@ -152,7 +165,7 @@ rssTime :: ZonedTime -> T.Text
 rssTime t = T.pack $ (formatTime defaultTimeLocale "%a, %d %b %0Y %H:%M:%S %z" t)
 
 allCompiledSplices :: Splices (C.Splice (AppHandler))
-allCompiledSplices = mconcat [ articlesSplice, articleSplice ]
+allCompiledSplices = mconcat [ articlesSplice, articleSplice, latestSplice ]
 
 ------------------------------------------------------------------------------
 -- | The application's routes.
