@@ -127,7 +127,8 @@ header a {
     width: 94%;
 }
 
-#content div {
+#content div, #content pre > code {
+    width: 100%;
     max-width: 100%;
 }
 
