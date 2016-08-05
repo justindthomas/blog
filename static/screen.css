@@ -14,6 +14,11 @@ body {
     margin: 0;
 }
 
+body.down header {
+    transition: 0.2s transform cubic-bezier(.3,.73,.3,.74);
+    transform: translateY(0);
+}
+
 h1, h2, h3, h4, h5, h6 {
     position: relative;
     float: left;
@@ -26,7 +31,6 @@ p, div, pre > code, img, audio {
     clear: left;
     margin: 0;
     padding: 0;
-    width: 100%;
 }
 
 pre > code {
@@ -42,6 +46,17 @@ a:hover {
     cursor: pointer;
 }
 
+ol, ul {
+    position: relative;
+    float: left;
+    margin-top: 0;
+    padding-left: 30px;
+}
+
+ol li {
+    margin-bottom: 10px;
+}
+
 img {
     border: none;
     max-width: 100%;
@@ -54,7 +69,7 @@ audio {
     margin-top: 1em;
 }
 
-#header {
+header {
     position: fixed;
     top: 0px;
     width: 100%;
@@ -63,22 +78,48 @@ audio {
     background: #FFFFFF;
     border-bottom: 1px solid #EBECED;
     z-index: 999;
+    transform: translateY(-100%);
 }
 
-#header p {
+header p {
     width: 50%;
     margin-bottom: 0;
     padding: 0.5em 1em;
 }
 
-#header > p:last-child {
+header > p:last-child {
     text-align: right;
     clear: none;
 }
 
-#header a {
+header a {
     text-decoration: none;
     color: #506774;
+}
+
+#static-header {
+    margin-left: 3%;
+    padding-left: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+#static-header div.main span {
+    font-size: xx-large;
+}
+
+#static-header div.sub span {
+    font-size: small;
+}
+
+#static-header div.main a {
+    text-decoration: none;
+    color: #000000;
+}
+
+#static-header div.sub {
+    padding-bottom: 10px;
+    border-bottom: 2px solid #EBECED;
 }
 
 #content {
@@ -100,10 +141,6 @@ audio {
 
 #content > div:last-child {
     border-bottom: 0;
-}
-
-#content > div:first-child {
-    margin-top: 2em;
 }
 
 .creation, .title {
@@ -136,5 +173,46 @@ audio {
 
 .article > p {
     padding-bottom: 1em;
+}
+
+#navigation {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+#navigation .button {
+    border-top: 1px solid #EBECED;
+    border-bottom: 1px solid #EBECED;
+    margin: 0;
+    padding: 0;
+    background-color: #FFFFFF;
+    float: left;
+    clear: none;
+}
+
+#navigation a:not(:first-child) .button {
+    border-left:1px solid #EBECED;
+}
+
+.halvsies li {
+    width: 50%;
+}
+
+.onesies li {
+    width: 100%;
+}
+
+#navigation li > div {
+    width: 98%;
+    padding: 0.5em;
+    margin: 1%;
+    text-align: center;
+}
+
+#navigation li > div:hover {
+    background-color: #6E7E88;
+    color: #FFFFFF;
 }
 

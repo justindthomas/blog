@@ -1,13 +1,21 @@
 <apply template="base">
-    <article>
-      <div>
-        <div class="title"><p><articleTitle/></p></div>
-        <div class="creation"><p><articleCreation/></p></div>
-        <div class="article"><articleContent/></div>
-        <div class="navigation">
-             <a href="/articles/${articlePrev}">Previous</a>
-             <a href="/articles/${articleNext}">Next</a>
-        </div>
-      </div>
-    </article>
+  <article>
+    <div>
+      <div class="title"><p><articleTitle/></p></div>
+      <div class="creation"><p><articleCreation/></p></div>
+      <div class="article"><articleContent/></div>
+      <ul id="navigation" class="halvsies">
+        <a href="/articles/${articlePrev}">
+          <li class="button">
+            <div>Previous</div>
+          </li>
+        </a>
+        <a href="/articles/${articleNext}">
+          <li class="button">
+            <div>Next</div>
+          </li>
+        </a>
+      </ul>
+    </div>
+  </article>
 </apply>
