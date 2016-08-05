@@ -144,7 +144,7 @@ header a {
     border-bottom: 0;
 }
 
-.creation, .title {
+#content .creation, #content .title {
     width: 50%;
     margin: 0;
     padding: 1em;
