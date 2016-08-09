@@ -151,12 +151,7 @@ header a {
     padding-bottom: 1em;
     margin-bottom: 1em;
     background: #FFFFFF;
-    border-bottom: 2px solid #EBECED;
     text-align: left;
-}
-
-#content > div:last-child {
-    border-bottom: 0;
 }
 
 #content .creation, #content .title {
@@ -193,23 +188,17 @@ header a {
 
 #navigation {
     list-style: none;
-    margin: 0;
     padding: 0;
     width: 100%;
 }
 
 #navigation .button {
-    border-top: 1px solid #EBECED;
-    border-bottom: 1px solid #EBECED;
     margin: 0;
     padding: 0;
     background-color: #FFFFFF;
     float: left;
     clear: none;
-}
-
-#navigation a:not(:first-child) .button {
-    border-left:1px solid #EBECED;
+    text-align: center;
 }
 
 .halvsies li {
