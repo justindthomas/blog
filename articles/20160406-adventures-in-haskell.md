@@ -61,7 +61,7 @@ It's unfortunate that Halcyon is not readily available on Mac OS X; there's a fi
 
 The easiest way for me to learn a new tool is to force myself to use it on a regular basis. Toward that end, I decided that building this website and using it to publish occasional articles would be a convenient way to accomplish that goal.
 
-There are at least three popular web framworks for Haskell: Servant, Snap and Yesod. After a relatively cursory review of the options, It seemed to me that Servant is too sparse and Yesod too opinionated for my taste. Snap seemed reasonably well-featured while still requiring the user to understand a bit about Haskell.
+There are at least three popular web frameworks for Haskell: Servant, Snap and Yesod. After a relatively cursory review of the options, It seemed to me that Servant is too sparse and Yesod too opinionated for my taste. Snap seemed reasonably well-featured while still requiring the user to understand a bit about Haskell.
 
 After a week or so of fighting with Snap, I nearly gave up. I was having a terrifically awful time trying to just get splices to work. I had been successful in getting a basic site running and in getting PostgreSQL integration working, but couldn't find a way to get data to show up in my templates. I made a desperate appeal for help in `#snapframework` and was pointed at namespaces as the likely culprit. A helpful person gave me this configuration snippet to turn off namespacing (I want to re-enable it once I get my mind wrapped around what's going on, but this works for now).
 
@@ -73,8 +73,6 @@ let hc = emptyHeistConfig
          & hcCompiledSplices .~ splices
 ~~~~
 
-## Moar Learning
+## More Learning
 
-There's much more for me to learn - I haven't even begun to really understand what monads are all about. I'll probably post haskelly stuff here occasionally and may toss un/loosely-related things up here as well (music, security opinions, etc.)
-
--Justin
+There's much more for me to learn - I haven't even begun to really understand what monads are all about. I'll probably post haskell-y stuff here occasionally and may toss un/loosely-related things up here as well (music, security opinions, etc.)
