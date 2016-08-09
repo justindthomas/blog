@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,100italic,500);
+
 * {
     box-sizing: border-box;
 }
@@ -12,7 +14,7 @@ html {
     padding: 0;
     margin: 0;
     background-color: #FFFFFF;
-    font-family: Verdana, Helvetica, sans-serif;
+    font-family: 'Raleway', sans-serif;
 }
 
 body {
@@ -111,10 +113,13 @@ header a {
 }
 
 #static-header div.main span {
+    font-weight: 500;
     font-size: xx-large;
 }
 
 #static-header div.sub span {
+    font-weight: 100;
+    font-style: italic;
     font-size: small;
 }
 
@@ -125,7 +130,7 @@ header a {
 
 #static-header div.sub {
     padding-bottom: 10px;
-    border-bottom: 2px solid #EBECED;
+    border-bottom: 1px solid #EBECED;
 }
 
 #content {
