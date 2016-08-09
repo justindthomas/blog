@@ -21,7 +21,7 @@
         <a href="/"><span>Serendipitous</span></a>
       </div>
       <div class="sub">
-        <span>A public journal by Justin Thomas</span>
+        <span>A public journal by <a href="/pages/about">Justin Thomas</a></span>
       </div>
     </div>
     <div id="content">

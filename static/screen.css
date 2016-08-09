@@ -83,10 +83,10 @@ header {
     width: 100%;
     margin: 0;
     padding: 0;
-    background: #FFFFFF;
-    border-bottom: 1px solid #EBECED;
+    background: #506774;
     z-index: 999;
     transform: translateY(-100%);
+    font-size: small;
 }
 
 header p {
@@ -102,7 +102,7 @@ header > p:last-child {
 
 header a {
     text-decoration: none;
-    color: #506774;
+    color: #FFFFFF;
 }
 
 #static-header {
@@ -110,6 +110,10 @@ header a {
     padding-left: 1em;
     padding-top: 1em;
     padding-bottom: 1em;
+}
+
+#static-header a {
+    text-decoration: none;
 }
 
 #static-header div.main span {
