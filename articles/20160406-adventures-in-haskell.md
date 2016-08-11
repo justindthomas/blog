@@ -2,9 +2,9 @@
 
 I've decided that I need to make a real effort to understand functional programming.
 
-I've written a lot of Java, Python, Javascript and Ruby. I'm comfortable with object-oriented frameworks, but have very little experience with functional languages. I've dabbled a little in Scala (that language was heavily used by the backend team of the last employer I worked with) but I never fully understood it or the underlying concepts.
+I've written a lot of Java, Python, JavaScript and Ruby. I'm comfortable with object-oriented frameworks, but have very little experience with functional languages. I've dabbled a little in Scala (that language was heavily used by the back-end team of the last employer I worked with) but I never fully understood it or the underlying concepts.
 
-With Haskell, I feel like I'm jumping in to the deep end without the object-oriented water wings that Scala allows. It's exhilirating and a little infuriating. Thankfully, `#haskell` and `#snapframework` exist on Freenode and are populated by very obliging and patient personalities.
+With Haskell, I feel like I'm jumping in to the deep end without the object-oriented water wings that Scala allows. It's exhilarating and a little infuriating. Thankfully, `#haskell` and `#snapframework` exist on Freenode and are populated by very obliging and patient personalities.
 
 I'll try to capture some of my more useful discoveries and realizations here in the hope that it may help others get started with Haskell.
 
@@ -63,7 +63,7 @@ The easiest way for me to learn a new tool is to force myself to use it on a reg
 
 There are at least three popular web frameworks for Haskell: Servant, Snap and Yesod. After a relatively cursory review of the options, It seemed to me that Servant is too sparse and Yesod too opinionated for my taste. Snap seemed reasonably well-featured while still requiring the user to understand a bit about Haskell.
 
-After a week or so of fighting with Snap, I nearly gave up. I was having a terrifically awful time trying to just get splices to work. I had been successful in getting a basic site running and in getting PostgreSQL integration working, but couldn't find a way to get data to show up in my templates. I made a desperate appeal for help in `#snapframework` and was pointed at namespaces as the likely culprit. A helpful person gave me this configuration snippet to turn off namespacing (I want to re-enable it once I get my mind wrapped around what's going on, but this works for now).
+After a week or so of fighting with Snap, I nearly gave up. I was having a terrifically awful time trying to just get splices to work. I had been successful in getting a basic site running and in getting PostgreSQL integration working, but couldn't find a way to get data to show up in my templates. I made a desperate appeal for help in `#snapframework` and was pointed at name spaces as the likely culprit. A helpful person gave me this configuration snippet to turn off name spacing (I want to re-enable it once I get my mind wrapped around what's going on, but this works for now).
 
 ~~~~ {.haskell}
 let hc = emptyHeistConfig

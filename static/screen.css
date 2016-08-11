@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Raleway:400,100italic,500);
+@import url(https://fonts.googleapis.com/css?family=Playfair+Display|Raleway:300i,400,600);
 
 * {
     box-sizing: border-box;
@@ -57,6 +57,7 @@ a:hover {
 ol, ul {
     position: relative;
     float: left;
+    clear: left;
     margin-top: 0;
     padding-left: 30px;
 }
@@ -117,12 +118,13 @@ header a {
 }
 
 #static-header div.main span {
-    font-weight: 500;
+    font-weight: 600;
+    font-family: 'Playfair Display', serif;
     font-size: xx-large;
 }
 
 #static-header div.sub span {
-    font-weight: 100;
+    font-weight: 300;
     font-style: italic;
     font-size: small;
 }
