@@ -13,11 +13,15 @@
   </head>
   <body ontouchstart="">
     <header>
-      <p><a href="/">Serendipitous</a></p>
+      <p>
+        <img src="/static/logo.png">
+        <a href="/">Serendipitous</a>
+      </p>
       <p><a href="/pages/about">About</a></p>
     </header>
     <div id="static-header">
       <div class="main">
+        <img src="/static/logo.png">
         <a href="/"><span>Serendipitous</span></a>
       </div>
       <div class="sub">

@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE GADTs, TypeFamilies, TemplateHaskell, QuasiQuotes, FlexibleInstances, StandaloneDeriving, AllowAmbiguousTypes, FlexibleContexts #-}
+{-# LANGUAGE GADTs, TypeFamilies, TemplateHaskell, QuasiQuotes, FlexibleInstances, StandaloneDeriving, AllowAmbiguousTypes, FlexibleContexts, ScopedTypeVariables #-}
 
 ------------------------------------------------------------------------------
 -- | This module is where all the routes and handlers are defined for your
@@ -10,6 +10,8 @@ module Site
   ) where
 
 ------------------------------------------------------------------------------
+import           Control.Applicative ( (<|>) )
+import           Control.Exception
 import           Control.Lens
 import           Control.Monad.Trans
 import           Control.Monad.Logger
@@ -97,14 +99,14 @@ definitions:
 
 articleSplices :: MonadSnap n => Splices (RuntimeSplice n Article -> C.Splice n)
 articleSplices = mapV (C.pureSplice . C.textSplice) $ do
-        "articleReference" ## reference
-        "articleTitle"     ## title
-        "articleSummary"   ## summary
-        "articleContent"   ## markdownToHtml . content
-        "articleCreation"  ## presentTime . createdAt
-        "articleRss"       ## rssTime . createdAt
-        "articlePrev"      ## prev
-        "articleNext"      ## next
+  "articleReference" ## reference
+  "articleTitle"     ## title
+  "articleSummary"   ## summary
+  "articleContent"   ## markdownToHtml . content
+  "articleCreation"  ## presentTime . createdAt
+  "articleRss"       ## rssTime . createdAt
+  "articlePrev"      ## prev
+  "articleNext"      ## next
         
 allArticlesSplice :: C.Splice (AppHandler)
 allArticlesSplice = do
@@ -183,26 +185,26 @@ routes = [ ("/", ifTop $ cRender "index")
 -- | The application initializer.
 app :: SnapletInit App App
 app = makeSnaplet "app" "Pure nonsense." Nothing $ do
-    let hc = emptyHeistConfig
-             & hcNamespace .~ ""
-             & hcTemplateLocations .~ [loadTemplates "templates"]
-             & hcLoadTimeSplices .~ defaultLoadTimeSplices
-             & hcCompiledSplices .~ allCompiledSplices
-    h <- nestSnaplet "" heist $ heistInit' "templates" hc
-    s <- nestSnaplet "sess" sess $
-           initCookieSessionManager "site_key.txt" "sess" (Just 3600)
-    addRoutes routes
-
-    cfg <- C.subconfig "postgresql-simple" <$> getSnapletUserConfig
-
-    connstr <- liftIO $ decodeUtf8 <$> getConnectionString cfg
-    p <- liftIO $ withPostgresqlPool (T.unpack connstr) 3 return
-    liftIO $ print connstr
-    liftIO $ runNoLoggingT (withConn (runDbPersist migrateDB) p)
-
-    return $ App h s p
+  let hc = emptyHeistConfig
+           & hcNamespace .~ ""
+           & hcTemplateLocations .~ [loadTemplates "templates"]
+           & hcLoadTimeSplices .~ defaultLoadTimeSplices
+           & hcCompiledSplices .~ allCompiledSplices
+  h <- nestSnaplet "" heist $ heistInit' "templates" hc
+  s <- nestSnaplet "sess" sess $
+    initCookieSessionManager "site_key.txt" "sess" (Just 3600)
+  addRoutes routes
+  
+  cfg <- C.subconfig "postgresql-simple" <$> getSnapletUserConfig
+  
+  connstr <- liftIO $ decodeUtf8 <$> getConnectionString cfg
+  p <- liftIO $ withPostgresqlPool (T.unpack connstr) 3 return
+  liftIO $ print connstr
+  liftIO $ runNoLoggingT (withConn (runDbPersist migrateDB) p)
+  
+  wrapSite (\site -> site <|> serveFile ("static/404.html"))
+  return $ App h s p
 
 migrateDB :: (MonadIO m, PersistBackend m) => m ()
 migrateDB = runMigration $ do
-      G.migrate (undefined :: ArticleMigration)
-
+  G.migrate (undefined :: ArticleMigration)

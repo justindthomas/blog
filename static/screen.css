@@ -84,10 +84,12 @@ header {
     width: 100%;
     margin: 0;
     padding: 0;
-    background: #506774;
+    background: #FFFFFF;
     z-index: 999;
     transform: translateY(-100%);
     font-size: small;
+    border-bottom: 1px solid #EBECED;
+    opacity: 0.85;
 }
 
 header p {
@@ -101,9 +103,15 @@ header > p:last-child {
     clear: none;
 }
 
+header img {
+    width: 20px;
+    margin: 0;
+    padding-right: 5px;
+}
+
 header a {
     text-decoration: none;
-    color: #FFFFFF;
+    color: #506774;
 }
 
 #static-header {
@@ -115,6 +123,13 @@ header a {
 
 #static-header a {
     text-decoration: none;
+}
+
+#static-header img {
+    width: 50px;
+    margin: 0;
+    padding-right: 10px;
+    padding-top: 5px;
 }
 
 #static-header div.main span {
