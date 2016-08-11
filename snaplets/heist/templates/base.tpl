@@ -11,7 +11,7 @@
     <script src="/static/jquery-3.1.0.min.js"></script>
     <script src="/static/application.js"></script>
   </head>
-  <body>
+  <body ontouchstart="">
     <header>
       <p><a href="/">Serendipitous</a></p>
       <p><a href="/pages/about">About</a></p>
