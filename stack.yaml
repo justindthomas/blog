@@ -1,5 +1,6 @@
 flags: {}
 extra-package-dbs: []
+local-bin-path: /srv/blog/.local/bin
 packages:
 - '.'
 extra-deps:

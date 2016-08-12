@@ -19,7 +19,7 @@
       </p>
       <p><a href="/pages/about">About</a></p>
     </header>
-    <div id="static-header">
+    <div id="banner">
       <div class="main">
         <img src="/static/logo.png">
         <a href="/"><span>Serendipitous</span></a>
@@ -32,9 +32,15 @@
       <apply-content/>
     </div>
     <div id="catalog">
+      <h3>Previous Articles</h3>
       <ul>
         <articles>
-          <a href="/articles/${articleReference}"><li><articleTitle/></li></a>
+          <a href="/articles/${articleReference}">
+            <li>
+              <p><articleTitle/></p>
+              <p><articleCreation/></p>
+            </li>
+          </a>
         </articles>
       </ul>
     </div>

@@ -10,3 +10,9 @@ credentials
 media/*
 \#*\#
 .\#*
+.sass-cache
+*.map
+static/screen.css
+.local
+.stack
+

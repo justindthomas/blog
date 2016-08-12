@@ -1,0 +1,6 @@
+#!/bin/bash
+
+git fetch origin
+git merge --ff-only origin/master
+make install && pkill blog && \
+     daemon -D /srv/blog -o /var/log/blog.log -- /srv/blog/.local/bin/blog -e prod

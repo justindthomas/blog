@@ -1,0 +1,263 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600|Raleway:300i,400);
+
+* {
+    box-sizing: border-box;
+}
+
+.not-active {
+    pointer-events: none;
+    cursor: default;
+    color: lightgray;
+}
+
+.halvsies li {
+    width: 50%;
+}
+
+.onesies li {
+    width: 100%;
+}
+
+html {
+    background-color: #FFFFFF;
+    font-family: 'Open Sans', sans-serif;
+}
+
+html,body {
+    padding: 0;
+    margin: 0;
+}
+
+body.down header {
+    transition: 0.2s transform cubic-bezier(.3,.73,.3,.74);
+    transform: translateY(0);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    position: relative;
+    float: left;
+    clear: left;
+}
+
+p, div, pre > code, img, audio {
+    position: relative;
+    float: left;
+    clear: left;
+    margin: 0;
+    padding: 0;
+}
+
+pre > code {
+    margin-bottom: 1em;
+}
+
+a {
+    text-decoration: underline;
+    color: #6E7E88;
+
+    :hover {
+        cursor: pointer;
+    }
+}
+
+ol, ul {
+    position: relative;
+    float: left;
+    clear: left;
+    margin-top: 0;
+    padding-left: 30px;
+
+    li {
+        margin-bottom: 10px;
+    }
+}
+
+img {
+    border: none;
+    max-width: 100%;
+    height: auto;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+audio {
+    margin-top: 1em;
+}
+
+header {
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: #FFFFFF;
+    z-index: 999;
+    transform: translateY(-100%);
+    font-size: small;
+    border-bottom: 1px solid #EBECED;
+    opacity: 0.93;
+    
+    p {
+        width: 50%;
+        margin-bottom: 0;
+        padding: 0.5em 1em;
+    }
+
+    
+    > p:last-child {
+        text-align: right;
+        clear: none;
+    }
+
+    img {
+        width: 20px;
+        margin: 0;
+        padding-right: 5px;
+        padding-top: 2px;
+    }
+
+    a {
+        text-decoration: none;
+        color: #506774;
+    }
+}
+
+#banner {
+    margin-left: 1%;
+    padding-left: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+
+    a {
+        text-decoration: none;
+    }
+
+    img {
+        width: 50px;
+        margin: 0;
+        padding-right: 10px;
+        padding-top: 5px;
+    }
+
+    div.main span {
+        font-weight: 600;
+        font-family: 'Raleway', serif;
+        font-size: 42px;
+    }
+
+    div.sub span {
+        font-weight: 400;
+        font-style: italic;
+        font-size: small;
+    }
+
+    div.main a {
+        text-decoration: none;
+        color: #000000;
+    }
+}
+
+#content {
+    margin-left: 1%;
+    min-width:404px;
+    width:70%;
+    border-top: 1px solid #EBECED;
+
+    > div, pre > code {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    div {
+        padding-bottom: 1em;
+        margin-bottom: 1em;
+        background: #FFFFFF;
+        text-align: left;
+    }
+
+    .creation, .title {
+        width: 50%;
+        margin: 0;
+        padding: 1em;
+        color: #333;
+        color: #6E7E88;
+    }
+
+    .creation {
+        clear: none;
+
+        > p {
+            text-align: right;
+            float: right;
+            border-radius: 0 5px 0 0;
+        }
+    }
+
+    .article {
+        width: 100%;
+        clear: both;
+        padding-left: 1em;
+        padding-right: 1em;
+        padding-bottom: 1em;
+        text-align: left;
+
+        > p {
+            padding-bottom: 1em;
+        }
+    }
+}
+    
+#catalog {
+    min-width: 195px;
+    clear: none;
+    padding-left: 1em;
+
+    h3 {
+        padding: 0;
+        margin: 0;
+    }
+
+    ul {
+        list-style: none;
+        width: 100%;
+        padding: 0;
+    }
+
+    ul li {
+        padding: 0;
+        width: 100%;
+    }
+
+    li p:last-child {
+        font-size: small;
+        font-weight: 300;
+        padding-bottom: 10px;
+    }
+}
+
+#navigation {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+
+    .button {
+        margin: 0;
+        padding: 0;
+        background-color: #FFFFFF;
+        float: left;
+        clear: none;
+        text-align: center;
+    }
+
+    li > div {
+        width: 98%;
+        padding: 0.5em;
+        margin: 1%;
+        text-align: center;
+    }
+
+    li > div:hover {
+        background-color: #6E7E88;
+        color: #FFFFFF;
+    }
+}
