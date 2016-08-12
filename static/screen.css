@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Playfair+Display|Raleway:300i,400,600);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600|Raleway:300i,400);
 
 * {
     box-sizing: border-box;
@@ -14,7 +14,7 @@ html {
     padding: 0;
     margin: 0;
     background-color: #FFFFFF;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 
 body {
@@ -89,7 +89,7 @@ header {
     transform: translateY(-100%);
     font-size: small;
     border-bottom: 1px solid #EBECED;
-    opacity: 0.85;
+    opacity: 0.93;
 }
 
 header p {
@@ -107,6 +107,7 @@ header img {
     width: 20px;
     margin: 0;
     padding-right: 5px;
+    padding-top: 2px;
 }
 
 header a {
@@ -134,12 +135,12 @@ header a {
 
 #static-header div.main span {
     font-weight: 600;
-    font-family: 'Playfair Display', serif;
-    font-size: xx-large;
+    font-family: 'Raleway', serif;
+    font-size: 42px;
 }
 
 #static-header div.sub span {
-    font-weight: 300;
+    font-weight: 400;
     font-style: italic;
     font-size: small;
 }
@@ -149,14 +150,11 @@ header a {
     color: #000000;
 }
 
-#static-header div.sub {
-    padding-bottom: 10px;
-    border-bottom: 1px solid #EBECED;
-}
-
 #content {
     margin-left: 3%;
-    width: 94%;
+    width: 69%;
+    border-right: 1px solid #EBECED;
+    border-top: 1px solid #EBECED;
 }
 
 #content div, #content pre > code {
@@ -177,6 +175,20 @@ header a {
     padding: 1em;
     color: #333;
     color: #6E7E88;
+}
+
+#catalog {
+    width: 25%;
+    clear: none;
+}
+
+#catalog ul {
+    list-style: none;
+    padding-left: 1em;
+}
+
+#catalog ul li {
+    padding: 0;
 }
 
 .creation {

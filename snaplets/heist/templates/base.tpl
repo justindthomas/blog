@@ -31,5 +31,12 @@
     <div id="content">
       <apply-content/>
     </div>
+    <div id="catalog">
+      <ul>
+        <articles>
+          <a href="/articles/${articleReference}"><li><articleTitle/></li></a>
+        </articles>
+      </ul>
+    </div>
   </body>
 </html>
