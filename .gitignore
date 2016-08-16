@@ -15,4 +15,4 @@ media/*
 static/screen.css
 .local
 .stack
-
+snaplets/sass/css

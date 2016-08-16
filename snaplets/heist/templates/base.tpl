@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Serendipitous</title>
-    <link rel="stylesheet" type="text/css" href="/static/screen.css"/>
+    <link rel="stylesheet" type="text/css" href="/sass/screen.css"/>
     <link rel="stylesheet" href="/static/styles/tomorrow-night-blue.css">
     <link href="/rss" rel="alternate" type="application/rss+xml" title="Serendipitous Articles" />
     <meta name="viewport" content="width=device-width, initial-scale=1">

@@ -45,7 +45,8 @@ Executable blog
                 groundhog-postgresql,
                 configurator,            
                 monad-logger,
-                resource-pool
+                resource-pool,
+                snaplet-sass
     
   if flag(old-base)
     build-depends:

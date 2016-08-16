@@ -27,6 +27,7 @@ import           Snap.Snaplet
 import           Snap.Snaplet.Heist
 import           Snap.Snaplet.Session.Backends.CookieSession
 import           Snap.Util.FileServe
+import           Snap.Snaplet.Sass
 import           Heist
 import qualified Heist.Compiled as C
 import qualified Heist.Compiled.LowLevel as C
@@ -178,6 +179,7 @@ routes = [ ("/", ifTop $ cRender "index")
          , ("/static", serveDirectory "static")
          , ("/media", serveDirectory "media")
          , ("/rss", cRenderAs "application/rss+xml" "rss")
+         , ("/sass", with sass sassServe)
          , ("/favicon.ico", serveFile "static/favicon.ico")
          ]
 
@@ -191,6 +193,7 @@ app = makeSnaplet "app" "Pure nonsense." Nothing $ do
            & hcLoadTimeSplices .~ defaultLoadTimeSplices
            & hcCompiledSplices .~ allCompiledSplices
   h <- nestSnaplet "" heist $ heistInit' "templates" hc
+  n <- nestSnaplet "sass" sass initSass
   s <- nestSnaplet "sess" sess $
     initCookieSessionManager "site_key.txt" "sess" (Just 3600)
   addRoutes routes
@@ -203,7 +206,7 @@ app = makeSnaplet "app" "Pure nonsense." Nothing $ do
   liftIO $ runNoLoggingT (withConn (runDbPersist migrateDB) p)
   
   wrapSite (\site -> site <|> serveFile ("static/404.html"))
-  return $ App h s p
+  return $ App h s p n
 
 migrateDB :: (MonadIO m, PersistBackend m) => m ()
 migrateDB = runMigration $ do

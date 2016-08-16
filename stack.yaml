@@ -130,6 +130,7 @@ extra-deps:
 - snap-loader-static-0.9.0.2
 - snap-server-0.9.5.1
 - snaplet-postgresql-simple-0.6.0.4
+- snaplet-sass-0.1.2.0
 - socks-0.5.4
 - stm-2.4.4.1
 - stm-chans-3.0.0.4

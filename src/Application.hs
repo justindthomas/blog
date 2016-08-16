@@ -14,6 +14,7 @@ import           Control.Lens
 import           Snap
 import           Snap.Snaplet.Heist
 import           Snap.Snaplet.Session
+import           Snap.Snaplet.Sass
 import           Data.Pool
 import           Database.Groundhog.Core
 import           Database.Groundhog.Postgresql
@@ -23,6 +24,7 @@ data App = App
     { _heist :: Snaplet (Heist App)
     , _sess  :: Snaplet SessionManager
     , _gh    :: Pool Postgresql
+    , _sass  :: Snaplet Sass
     }
 
 makeLenses ''App
