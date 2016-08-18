@@ -18,6 +18,7 @@ import           Control.Monad.Logger
 import           Data.Maybe
 import           Data.Time
 import           Data.ByteString (ByteString)
+import           Data.Binary
 import qualified Data.ByteString.Char8 as B
 import qualified Data.Configurator as C
 import qualified Data.Text as T
@@ -61,6 +62,12 @@ data ArticleMigration = ArticleMigration {
   createdAtM :: ZonedTime
 } deriving Show
 
+data StoredFile = StoredFile {
+  fileName     :: T.Text,
+  fileData     :: ByteString,
+  contentType  :: T.Text
+} deriving Show
+
 mkPersist defaultCodegenConfig [groundhog|
 definitions:
   - entity: ArticleMigration
@@ -96,6 +103,20 @@ definitions:
             dbName: created_at
           - name: frontPage
             dbName: front_page
+  - entity: StoredFile
+    dbName: files
+    constructors:
+      - name: StoredFile
+        fields:
+          - name: fileData
+            dbName: file_data
+          - name: fileName
+            dbName: file_name
+          - name: contentType
+            dbName: content_type
+        uniques:
+          - name: filename_uniq
+            fields: [fileName]
 |]
 
 articleSplices :: MonadSnap n => Splices (RuntimeSplice n Article -> C.Splice n)
@@ -123,6 +144,18 @@ getLatestArticle :: AppHandler [Article]
 getLatestArticle = do
   results <- runGH $ select $ (FrontPageField ==. True) `orderBy` [Desc CreatedAtField] `limitTo` 1
   return results
+
+getFileFromDatabase :: String -> AppHandler StoredFile
+getFileFromDatabase n = do
+  results <- runGH $ select $ (FileNameField ==. (T.pack n)) `limitTo` 1
+  return $ head results
+
+getFile :: AppHandler ()
+getFile = do
+  param <- getParam "name"
+  f <- getFileFromDatabase $ B.unpack $ fromMaybe "" param
+  modifyResponse $ setContentType $ B.pack $ T.unpack $ contentType $ f
+  writeBS $ fileData $ f
 
 getSingleArticle :: String -> AppHandler Article
 getSingleArticle k = do
@@ -180,6 +213,7 @@ routes = [ ("/", ifTop $ cRender "index")
          , ("/media", serveDirectory "media")
          , ("/rss", cRenderAs "application/rss+xml" "rss")
          , ("/sass", with sass sassServe)
+         , ("/file/:name", getFile)
          , ("/favicon.ico", serveFile "static/favicon.ico")
          ]
 
@@ -211,3 +245,4 @@ app = makeSnaplet "app" "Pure nonsense." Nothing $ do
 migrateDB :: (MonadIO m, PersistBackend m) => m ()
 migrateDB = runMigration $ do
   G.migrate (undefined :: ArticleMigration)
+  G.migrate (undefined :: StoredFile)

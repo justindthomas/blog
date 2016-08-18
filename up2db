@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+
+import psycopg2
+import argparse
+
+parser = argparse.ArgumentParser(description='Upload file to database.')
+parser.add_argument('connstring', help='The database connection string.')
+parser.add_argument('filepath', help='The file to be uplaoded.')
+parser.add_argument('content', help='The content-type of the file.')
+parser.add_argument('filename', help='The name of the file as it will exist to be retrieved from the database.')
+
+args = parser.parse_args()
+
+conn = psycopg2.connect(args.connstring)
+
+curs = conn.cursor()
+
+f = open(args.filepath,'rb')
+
+filedata=f.read()
+
+binary = psycopg2.Binary(filedata)
+
+curs.execute("insert into files(id, file_name, file_data, content_type) VALUES (DEFAULT,%s,%s,%s) RETURNING id", (args.filename, binary, args.content))
+
+conn.commit()
+
