@@ -18,7 +18,6 @@ import           Control.Monad.Logger
 import           Data.Maybe
 import           Data.Time
 import           Data.ByteString (ByteString)
-import           Data.Binary
 import qualified Data.ByteString.Char8 as B
 import qualified Data.Configurator as C
 import qualified Data.Text as T
