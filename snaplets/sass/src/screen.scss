@@ -93,14 +93,14 @@ header {
     background: #FFFFFF;
     z-index: 999;
     transform: translateY(-100%);
-    font-size: small;
+    font-size: medium;
     border-bottom: 1px solid #EBECED;
-    opacity: 0.93;
+    opacity: 0.95;
     
     p {
         width: 50%;
         margin-bottom: 0;
-        padding: 0.5em 1em;
+        padding: 0.5em 4em;
     }
 
     
@@ -110,26 +110,27 @@ header {
     }
 
     img {
-        width: 20px;
+        width: 22px;
         margin: 0;
         padding-right: 5px;
-        padding-top: 2px;
+        padding-top: 3px;
     }
 
     a {
         text-decoration: none;
-        color: #506774;
+        color: #000000;
     }
 }
 
 #banner {
-    padding-left: 1em;
+    padding-left: 4em;
     padding-top: 1em;
     padding-bottom: 1em;
     color: #000000;
     background: #FFFFFF;
     width: 100%;
-
+    border-bottom: 1px solid #EBECED;
+    
     a {
         text-decoration: none;
     }
@@ -160,12 +161,12 @@ header {
 }
 
 #content {
-    margin-left: 1%;
-    margin-bottom: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 1em;
     min-width:404px;
-    width:70%;
+    width:80%;
     clear: none;
-    border: 1px solid #EBECED;
 
     > div, pre > code {
         width: 100%;
@@ -211,6 +212,7 @@ header {
 }
     
 #catalog {
+    width: 20%;
     min-width: 195px;
     clear: none;
     padding-left: 1em;
