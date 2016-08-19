@@ -100,13 +100,14 @@ header {
     p {
         width: 50%;
         margin-bottom: 0;
-        padding: 0.5em 4em;
+        padding: 0.5em 0 0.5em 4em;
     }
 
     
     > p:last-child {
         text-align: right;
         clear: none;
+        padding: 0.5em 4em 0.5em 0;
     }
 
     img {
