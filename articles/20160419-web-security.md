@@ -2,7 +2,7 @@
 
 I've put some effort in to ensuring that the transport security for this site leverages the latest technologies available. To that end, I've enabled HSTS (to ensure that client browsers know to only request this site over HTTPS) and HPKP (to instruct client browsers to only accept a connection made with the correct public key).
 
-![](/media/hpkp.png)
+![](/file/hpkp.png)
 
 To get the fingerprint to use for pinning, I used OpenSSL:
 
