@@ -123,10 +123,12 @@ header {
 }
 
 #banner {
-    margin-left: 1%;
     padding-left: 1em;
     padding-top: 1em;
     padding-bottom: 1em;
+    color: #000000;
+    background: #FFFFFF;
+    width: 100%;
 
     a {
         text-decoration: none;
@@ -159,9 +161,11 @@ header {
 
 #content {
     margin-left: 1%;
+    margin-bottom: 1em;
     min-width:404px;
     width:70%;
-    border-top: 1px solid #EBECED;
+    clear: none;
+    border: 1px solid #EBECED;
 
     > div, pre > code {
         width: 100%;
@@ -179,7 +183,6 @@ header {
         width: 50%;
         margin: 0;
         padding: 1em;
-        color: #333;
         color: #6E7E88;
     }
 
@@ -211,6 +214,7 @@ header {
     min-width: 195px;
     clear: none;
     padding-left: 1em;
+    padding-top: 1em;
 
     h3 {
         padding: 0;

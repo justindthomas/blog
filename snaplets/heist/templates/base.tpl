@@ -28,11 +28,8 @@
         <span>A public journal by <a href="/pages/about">Justin Thomas</a></span>
       </div>
     </div>
-    <div id="content">
-      <apply-content/>
-    </div>
     <div id="catalog">
-      <h3>Previous Articles</h3>
+      <h3>Other Articles</h3>
       <ul>
         <articles>
           <a href="/articles/${articleReference}">
@@ -43,6 +40,9 @@
           </a>
         </articles>
       </ul>
+    </div>
+    <div id="content">
+      <apply-content/>
     </div>
   </body>
 </html>
