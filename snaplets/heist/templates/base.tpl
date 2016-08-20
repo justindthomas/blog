@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="/sass/screen.css"/>
     <link rel="stylesheet" href="/static/styles/tomorrow-night-blue.css">
     <link href="/rss" rel="alternate" type="application/rss+xml" title="Serendipitous Articles" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
     <script src="/static/highlight.pack.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
     <script src="/static/jquery-3.1.0.min.js"></script>

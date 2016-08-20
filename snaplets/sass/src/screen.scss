@@ -28,6 +28,10 @@ html,body {
     margin: 0;
 }
 
+body {
+    min-width: 1050px;
+}
+
 body.down header {
     transition: 0.2s transform cubic-bezier(.3,.73,.3,.74);
     transform: translateY(0);
@@ -100,14 +104,14 @@ header {
     p {
         width: 50%;
         margin-bottom: 0;
-        padding: 0.5em 0 0.5em 4em;
+        padding: 0.5em 0 0.5em 2em;
     }
 
     
     > p:last-child {
         text-align: right;
         clear: none;
-        padding: 0.5em 4em 0.5em 0;
+        padding: 0.5em 2em 0.5em 0;
     }
 
     img {
@@ -124,7 +128,7 @@ header {
 }
 
 #banner {
-    padding-left: 4em;
+    padding-left: 2em;
     padding-top: 1em;
     padding-bottom: 1em;
     color: #000000;
@@ -165,7 +169,6 @@ header {
     padding-left: 1em;
     padding-right: 1em;
     padding-bottom: 1em;
-    min-width:404px;
     width:80%;
     clear: none;
 
@@ -214,9 +217,8 @@ header {
     
 #catalog {
     width: 20%;
-    min-width: 195px;
     clear: none;
-    padding-left: 1em;
+    padding-left: 2em;
     padding-top: 1em;
 
     h3 {
