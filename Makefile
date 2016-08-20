@@ -1,8 +1,5 @@
-install: css build
+install: build
 	stack install
-
-css:
-	sass static/screen.scss static/screen.css
 
 build:
 	stack build
