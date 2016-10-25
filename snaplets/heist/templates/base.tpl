@@ -20,12 +20,12 @@
       <p><a href="/pages/about">About</a></p>
     </header>
     <div id="banner">
-      <div class="main">
+      <div class="logo">
         <img src="/static/logo.png">
-        <a href="/"><span>Serendipitous</span></a>
-      </div>
-      <div class="sub">
-        <span>A public journal by <a href="/pages/about">Justin Thomas</a></span>
+        <div class="title">
+          <a href="/"><span>Serendipitous</span></a>
+          <span>A public journal by <a href="/pages/about">Justin Thomas</a></span>
+        </div>
       </div>
     </div>
     <div id="catalog">

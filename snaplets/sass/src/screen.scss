@@ -141,27 +141,31 @@ header {
     }
 
     img {
-        width: 50px;
+        width: 65px;
         margin: 0;
         padding-right: 10px;
-        padding-top: 5px;
+        padding-top: 12px;
     }
 
-    div.main span {
-        font-weight: 600;
-        font-family: 'Raleway', serif;
-        font-size: 42px;
-    }
+    div.title {
+        clear: none;
+        padding-left: 20px;
+        
+        > a {
+            text-decoration: none;
+            color: #000000;
+            
+            span {
+                font-weight: 600;
+                font-family: 'Raleway', serif;
+                font-size: 42px;
+            }
+        }
 
-    div.sub span {
-        font-weight: 400;
-        font-style: italic;
-        font-size: small;
-    }
-
-    div.main a {
-        text-decoration: none;
-        color: #000000;
+        > span {
+            display: block;
+            clear: left;
+        }
     }
 }
 
