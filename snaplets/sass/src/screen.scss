@@ -101,6 +101,30 @@ header, #catalog {
     display: none;
 }
 
+ol, ul {
+    position: relative;
+    float: left;
+    clear: left;
+    margin-top: 0;
+    padding-left: 30px;
+
+    li {
+        margin-bottom: 10px;
+    }
+}
+
+img {
+    border: none;
+    max-width: 100%;
+    height: auto;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+audio {
+    margin-top: 1em;
+}
+    
 #content {    
     padding-left: 0.5em;
     padding-right: 0.5em;
@@ -186,30 +210,6 @@ header, #catalog {
     body.down header {
         transition: 0.2s transform cubic-bezier(.3,.73,.3,.74);
         transform: translateY(0);
-    }
-
-    ol, ul {
-        position: relative;
-        float: left;
-        clear: left;
-        margin-top: 0;
-        padding-left: 30px;
-
-        li {
-            margin-bottom: 10px;
-        }
-    }
-
-    img {
-        border: none;
-        max-width: 100%;
-        height: auto;
-        margin-top: 1em;
-        margin-bottom: 1em;
-    }
-
-    audio {
-        margin-top: 1em;
     }
 
     header {
