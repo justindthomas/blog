@@ -129,7 +129,7 @@ body.down header {
     transition: 0.2s transform cubic-bezier(.3,.73,.3,.74);
     transform: translateY(0);
 }
-    
+
 header {
     position: fixed;
     top: 0px;
@@ -142,14 +142,13 @@ header {
     font-size: medium;
     border-bottom: 1px solid #EBECED;
     opacity: 0.95;
-    
+
     p {
         width: 50%;
         margin-bottom: 0;
         padding: 0.5em 0 0.5em 2em;
     }
 
-    
     > p:last-child {
         text-align: right;
         clear: none;
@@ -168,7 +167,7 @@ header {
         color: #000000;
     }
 }
-    
+
 #content {    
     padding-left: 0.5em;
     padding-right: 0.5em;
