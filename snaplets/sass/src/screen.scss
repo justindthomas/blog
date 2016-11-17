@@ -97,7 +97,7 @@ a {
     }
 }
 
-header, #catalog {
+#catalog {
     display: none;
 }
 
@@ -213,7 +213,6 @@ audio {
     }
 
     header {
-        display: block;
         position: fixed;
         top: 0px;
         width: 100%;
