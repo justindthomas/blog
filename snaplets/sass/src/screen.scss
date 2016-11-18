@@ -191,6 +191,11 @@ header {
         background: #FFFFFF;
         text-align: left;
     }
+    
+    > div {
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
 
     .creation, .title {
         width: 50%;
