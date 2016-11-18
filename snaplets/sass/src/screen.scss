@@ -56,28 +56,33 @@ a {
 }
 
 #banner {
-    padding-left: 1em;
-    padding-top: 1em;
-    padding-bottom: 1em;
     color: #000000;
     background: #FFFFFF;
-    width: 100%;
-    border-bottom: 1px solid #EBECED;
+    width: 100vw;
+
+    > div {
+        width: 100vw;
+    }
     
     a {
         text-decoration: none;
     }
 
     img {
+        position: absolute;
+        top: 0; bottom:0; left: 0; right:0;
+        margin: 10px auto;
         width: 65px;
-        margin: 0;
-        padding-right: 10px;
-        padding-top: 12px;
     }
         
     div.title {
-        clear: none;
-        padding-left: 10px;
+        margin-top: 80px;
+        width: 100vw;
+        text-align: center;
+        background: #EBECED;
+        border-top: 1px solid #000;
+        border-bottom: 1px solid #000;
+        padding-bottom: 5px;
         
         > a {
             text-decoration: none;
@@ -248,48 +253,6 @@ header {
 @media (min-width: 800px) {
     body {
         min-width: 800px;
-    }
-
-    #banner {
-        padding-left: 2em;
-        padding-top: 1em;
-        padding-bottom: 1em;
-        color: #000000;
-        background: #FFFFFF;
-        width: 100%;
-        border-bottom: 1px solid #EBECED;
-    
-        a {
-            text-decoration: none;
-        }
-
-        img {
-            width: 65px;
-            margin: 0;
-            padding-right: 10px;
-            padding-top: 12px;
-        }
-        
-        div.title {
-            clear: none;
-            padding-left: 20px;
-            
-            > a {
-                text-decoration: none;
-                color: #000000;
-            
-                span {
-                    font-weight: 600;
-                    font-family: 'Raleway', serif;
-                    font-size: 42px;
-                }
-            }
-
-            > span {
-                display: block;
-                clear: left;
-            }
-        }
     }
 
     #content {
