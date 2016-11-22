@@ -40,7 +40,7 @@ scp /platform/i86xpv/kernel/unix
 root@xenserver:/opt/kernels/kernel_nexenta
 ~~~~
 
-* Log in to the XenServer and configure the Nexenta VM to use the kernel and ramdisk you’ve moved over:
+* Log in to the XenServer and configure the Nexenta VM to use the kernel and ramdisk you've moved over:
 
 ~~~~ {.bash}
 xe vm-param-set uuid=[VM UUID]
