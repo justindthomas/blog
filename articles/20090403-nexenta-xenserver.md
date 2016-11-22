@@ -7,7 +7,7 @@ Also, the CDROM device seems to be handled differently in Nexenta than it is in 
 A few notes: I use `/opt/kernels` on my XenServer to store the kernels and ramdisks I use for my PV systems. You can substitute whatever you like for that directory; technically I think the correct place would be somewhere in `/usr/local`. Likewise, the names that I give the ramdisks and kernels are completely subjective; feel free to devise your own scheme.
 
 * Using the "Other Media" option in XenCenter, install NexentaCP from the installation CD like you’d install a Windows system.
-* Configure the installation appropriately at the presented prompts. Note that due to running in HVM mode, this initial installation will take a significant amount of time. Fear not, things will move much more quickly by the time you’re done.
+* Configure the installation appropriately at the presented prompts. Note that due to running in HVM mode, this initial installation will take a significant amount of time. Fear not, things will move much more quickly by the time you're done.
 * Copy `/platform/i86pc/miniroot` from the Nexenta installation CD to a system where you can work with it. I used an OpenSolaris system for the next steps.
 * Rename `miniroot` to `miniroot.gz`.
 * Decompress the `miniroot.gz` archive: `gunzip miniroot.gz`
@@ -83,9 +83,9 @@ PV-ramdisk=/opt/kernels/ramdisk_nexenta
 Congratulations! You now have a paravirtualized Nexenta core system. Upon booting, the VM screen should look something like:
 
 ~~~~ {.bash}
-v3.2.1 chgset ’58bf50a2c754.3c18e9e0f827 (3.2.1 5.0.0.235.17085)’
+v3.2.1 chgset '58bf50a2c754.3c18e9e0f827 (3.2.1 5.0.0.235.17085)'
 SunOS Release 5.11 Version NexentaOS_20081207 32-bit
-Loading Nexenta…
+Loading Nexenta...
 NOTICE: xdf@51712: failed to read feature-barrier
 Hostname: nexenta-test
 Reading ZFS config: done.
@@ -98,6 +98,6 @@ nexenta-test console login:
 
 Take particular note: when you update a package that includes a kernel module, be sure to update the `boot\_archive` (`bootadm update-archive`) and copy that updated archive over to the XenServer as `/opt/kernels/ramdisk_nexenta` BEFORE rebooting the Nexenta VM. I ran into a problem where the system could not load the console after doing an `aptitude safe-upgrade` and rebooting without updating the ramdisk.
 
-Also, after installing I had to run an `apt-get -f install` to finish the installation of `libtimedate-perl` before doing an `aptitude safe-upgrade`. That package doesn’t appear to be installed correctly by the installer.
+Also, after installing I had to run an `apt-get -f install` to finish the installation of `libtimedate-perl` before doing an `aptitude safe-upgrade`. That package doesn't appear to be installed correctly by the installer.
 
 As always, please let me know if you have any comments or suggestions!
