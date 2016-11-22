@@ -28,4 +28,4 @@ Reboot, and you’re good to go! Remember to run bootadm update-archive after th
 
 Here’s a screenshot; note that I don’t know what’s up with the savecore error. Considering the unstable nature of the code, those sorts of hiccoughs don’t surprise me.
 
-![OpenIndiana](https://ser.endipito.us/files/oi.png)
+![OpenIndiana](https://ser.endipito.us/file/oi.png)

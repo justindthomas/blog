@@ -6,7 +6,7 @@ That last component opens a local UNIX domain socket on the sensor. Snort is the
 
 This is what the interface currently looks like with those modifications:
 
-[IDS Alert Console](https://ser.endipito.us/files/idsalertconsole.png)
+[IDS Alert Console](https://ser.endipito.us/file/idsalertconsole.png)
 
 I only recently deployed the Snort sensor and it has not been tuned yet; that’s why we see so many “(portscan)” alerts in the console above. I’m viewing the last 24 hours worth of alerts in this shot and have zeroed in on one of the less frequent alerts. All of the alerts shown are false positives, but their generation is good for my testing.
 
