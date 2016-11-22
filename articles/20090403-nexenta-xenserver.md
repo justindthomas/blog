@@ -6,7 +6,7 @@ Also, the CDROM device seems to be handled differently in Nexenta than it is in 
 
 A few notes: I use `/opt/kernels` on my XenServer to store the kernels and ramdisks I use for my PV systems. You can substitute whatever you like for that directory; technically I think the correct place would be somewhere in `/usr/local`. Likewise, the names that I give the ramdisks and kernels are completely subjective; feel free to devise your own scheme.
 
-* Using the "Other Media" option in XenCenter, install NexentaCP from the installation CD like you’d install a Windows system.
+* Using the "Other Media" option in XenCenter, install NexentaCP from the installation CD like you'd install a Windows system.
 * Configure the installation appropriately at the presented prompts. Note that due to running in HVM mode, this initial installation will take a significant amount of time. Fear not, things will move much more quickly by the time you're done.
 * Copy `/platform/i86pc/miniroot` from the Nexenta installation CD to a system where you can work with it. I used an OpenSolaris system for the next steps.
 * Rename `miniroot` to `miniroot.gz`.
