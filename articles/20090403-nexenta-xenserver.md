@@ -1,23 +1,31 @@
 # Installing NexentaCP 2 RC1 on XenServer 5
 
-Although Nexenta uses the OpenSolaris kernel, there are a few unique steps that you’ll need to take in order to get Nexenta up and running paravirtualized (PV) on XenServer 5. These steps are a result of the lack of certain files in the default ramdisk on the Nexenta installation CD.
+Although Nexenta uses the OpenSolaris kernel, there are a few unique steps that you'll need to take in order to get Nexenta up and running paravirtualized (PV) on XenServer 5. These steps are a result of the lack of certain files in the default ramdisk on the Nexenta installation CD.
 
 Also, the CDROM device seems to be handled differently in Nexenta than it is in OpenSolaris. As a result, these instructions will require you to fully install Nexenta in HVM mode and then flip the right bits to convert it to PV.
 
-A few notes: I use /opt/kernels on my XenServer to store the kernels and ramdisks I use for my PV systems. You can substitute whatever you like for that directory; technically I think the “correct” place would be somewhere in “/usr/local”. Likewise, the names that I give the ramdisks and kernels are completely subjective; feel free to devise your own scheme.
+A few notes: I use `/opt/kernels` on my XenServer to store the kernels and ramdisks I use for my PV systems. You can substitute whatever you like for that directory; technically I think the correct place would be somewhere in `/usr/local`. Likewise, the names that I give the ramdisks and kernels are completely subjective; feel free to devise your own scheme.
 
-* Using the “Other Media” option in XenCenter, install NexentaCP from the installation CD like you’d install a Windows system.
+* Using the "Other Media" option in XenCenter, install NexentaCP from the installation CD like you’d install a Windows system.
 * Configure the installation appropriately at the presented prompts. Note that due to running in HVM mode, this initial installation will take a significant amount of time. Fear not, things will move much more quickly by the time you’re done.
-* Copy /platform/i86pc/miniroot from the Nexenta installation CD to a system where you can work with it. I used an OpenSolaris system for the next steps.
-* Rename miniroot to miniroot.gz.
-* Decompress the miniroot.gz archive: gunzip miniroot.gz
+* Copy `/platform/i86pc/miniroot` from the Nexenta installation CD to a system where you can work with it. I used an OpenSolaris system for the next steps.
+* Rename `miniroot` to `miniroot.gz`.
+* Decompress the `miniroot.gz` archive: `gunzip miniroot.gz`
 * Mount the miniroot archive as a loopback device:
-  `mount -o loop [/path/to/]miniroot /[mountpoint]`
-* Change directories into the /platform directory on the mounted filesystem
-* Copy the entire /platform/i86xpv directory from the HVM Nexenta system via scp over to the mounted filesystem. You might need to do this from the HVM Nexenta system (unless you `svcadm enable ssh` on the HVM Nexenta system).
+
+~~~~ {.bash}
+mount -o loop [/path/to/]miniroot /[mountpoint]
+~~~~
+
+* Change directories into the `/platform` directory on the mounted filesystem
+* Copy the entire `/platform/i86xpv` directory from the HVM Nexenta system via scp over to the mounted filesystem. You might need to do this from the HVM Nexenta system (unless you `svcadm enable ssh` on the HVM Nexenta system).
 * Move out of the miniroot filesystem on your working machine (the OpenSolaris box for me) and unmount the archive:
-  `unmount /[mountpoint]`
-* Recompress the miniroot archive: gzip miniroot
+
+~~~~ {.bash}
+unmount /[mountpoint]
+~~~~
+
+* Recompress the miniroot archive: `gzip miniroot`
 * Copy the newly modified miniroot archive over to an appropriate directory on the XenServer:
 
 ~~~~ {.bash]
@@ -46,8 +54,8 @@ xe vm-param-set uuid=[VM UUID]
 HVM-boot-policy=
 ~~~~
 
-* Reboot the newly paravirtualized Nexenta VM. It will fail to boot – that’s okay.
-* When prompted to log in for maintenance, enter root with a blank password. If you have trouble getting the VM to respond to your keystrokes in XenCenter, try restarting XenCenter; every time I’ve done this, XenCenter has failed at this point and had to be restarted.
+* Reboot the newly paravirtualized Nexenta VM. It will fail to boot - that's okay.
+* When prompted to log in for maintenance, enter root with a blank password. If you have trouble getting the VM to respond to your keystrokes in XenCenter, try restarting XenCenter; every time I've done this, XenCenter has failed at this point and had to be restarted.
 * Import the syspool zpool: `zpool import -f syspool`
 * Configure the PV-args on the XenServer to specify the bootfs:
 
@@ -59,7 +67,7 @@ bootpath="/xpvd/xdf@51712:a"'
 ~~~~
 
 * Reboot your Nexenta system. At this point, it should boot up and let you log in normally.
-* Once booted, plumb your virtualized network interfaces: ifconfig xnf0 plumb
+* Once booted, plumb your virtualized network interfaces: `ifconfig xnf0 plumb`
 * Rename `/etc/hostname.rtls0` and `/etc/hostname6.rtls0` to `/etc/hostname.xnf0` and `/etc/hostname6.xnf0`
 * Reboot.
 * Copy `/platform/i86pc/boot\_archive` from the booted Nexenta system over to the XenServer as something like `/opt/kernels/ramdisk_nexenta`.
