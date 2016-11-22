@@ -1,6 +1,6 @@
 # OpenIndiana and XenServer
 
-Now that OpenSolaris is officially dead and the drama has died down a bit, I thought it might be time to figure out how to install OpenIndiana on my XenServer. I've heard some say that you can’t install the new distribution on Xen as a domU, but that is demonstrably incorrect (although as I understand it, dom0 is presently out of the question due to Oracle pulling out the relevant xVM bits).
+Now that OpenSolaris is officially dead and the drama has died down a bit, I thought it might be time to figure out how to install OpenIndiana on my XenServer. I've heard some say that you can't install the new distribution on Xen as a domU, but that is demonstrably incorrect (although as I understand it, dom0 is presently out of the question due to Oracle pulling out the relevant xVM bits).
 
 Installing OpenIndiana 147 on XenServer 5.5 is nearly identical to installing OpenSolaris on the same (as would be expected considering OpenIndiana’s roots).
 
