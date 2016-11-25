@@ -70,7 +70,7 @@ bootpath="/xpvd/xdf@51712:a"'
 * Once booted, plumb your virtualized network interfaces: `ifconfig xnf0 plumb`
 * Rename `/etc/hostname.rtls0` and `/etc/hostname6.rtls0` to `/etc/hostname.xnf0` and `/etc/hostname6.xnf0`
 * Reboot.
-* Copy `/platform/i86pc/boot\_archive` from the booted Nexenta system over to the XenServer as something like `/opt/kernels/ramdisk_nexenta`.
+* Copy `/platform/i86pc/boot_archive` from the booted Nexenta system over to the XenServer as something like `/opt/kernels/ramdisk_nexenta`.
 * Reconfigure the VM parameters to point at the new boot archive:
 
 ~~~~ {.bash}
@@ -96,7 +96,7 @@ NexentaCore 2.0 RC1 (Hardy 8.04/b104+)
 nexenta-test console login:
 ~~~~
 
-Take particular note: when you update a package that includes a kernel module, be sure to update the `boot\_archive` (`bootadm update-archive`) and copy that updated archive over to the XenServer as `/opt/kernels/ramdisk_nexenta` BEFORE rebooting the Nexenta VM. I ran into a problem where the system could not load the console after doing an `aptitude safe-upgrade` and rebooting without updating the ramdisk.
+Take particular note: when you update a package that includes a kernel module, be sure to update the `boot_archive` (`bootadm update-archive`) and copy that updated archive over to the XenServer as `/opt/kernels/ramdisk_nexenta` BEFORE rebooting the Nexenta VM. I ran into a problem where the system could not load the console after doing an `aptitude safe-upgrade` and rebooting without updating the ramdisk.
 
 Also, after installing I had to run an `apt-get -f install` to finish the installation of `libtimedate-perl` before doing an `aptitude safe-upgrade`. That package doesn't appear to be installed correctly by the installer.
 
