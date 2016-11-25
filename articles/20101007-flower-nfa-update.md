@@ -12,23 +12,18 @@ I've made some significant updates both to the Flower Visualization Server and t
 4. Fonts (@font-face) are used more consistently throughout the workings of the console.
 5. The most significant recent changes to the Visualization Server are in the area chart output:
   ![Histogram](https://ser.endipito.us/file/histogram-enlarged.png)
-  
-I changed the chart from arithmetic to logarithmic because I found that my UDP data was being pushed down to 1 pixel as it was tremendously outweighed by the TCP data. Horizontal scale lines were added to illustrate the fact that the bottom of the graph represents an amount of data many orders of magnitude less than the top of the graph. I also wrote code to insert vertical lines at the beginning of each hour, day and month to better make sense of the data. Here is a 30-day graph shown within it's containing window (data older than a few days is not pictured because I had to reset the database when I implemented the resolution concept):
+  I changed the chart from arithmetic to logarithmic because I found that my UDP data was being pushed down to 1 pixel as it was tremendously outweighed by the TCP data. Horizontal scale lines were added to illustrate the fact that the bottom of the graph represents an amount of data many orders of magnitude less than the top of the graph. I also wrote code to insert vertical lines at the beginning of each hour, day and month to better make sense of the data. Here is a 30-day graph shown within it's containing window (data older than a few days is not pictured because I had to reset the database when I implemented the resolution concept):
 
 ![Histogram](https://ser.endipito.us/file/histogram.png)
 
 ## Analysis Server
 
 1. In line with the changes I noted in my last update to how statistical flow data is stored, I've introduced multiple levels of summarization to greatly decrease the time it takes to complete queries for longer time durations. The levels are configurable, but presently data is stored in 10 second, 1000 second, and 10000 second resolutions.
-  
   To put that in to perspective, at a resolution of 10 seconds, a query for 30 days worth of data would need to scroll through 259,200 records. That same query would need to traverse only 2,592 records at a 1,000 second resolution and only 260 records at a 10,000 second resolution.
 2. I updated the chart data generation code to take advantage of the new resolution levels. Network maps represent data within a time period with little regard for how that data is distributed, so we can use a very low resolution and access the data very quickly.
-  
   Area charts are more sensitive to how data is distributed throughout a time period and I've updated the code to dynamically select a resolution based on the width (in pixels) of the ultimate output and the time period selected. For example, a chart that is 600 pixels wide wouldn't be well supported by a 30 day query split into 260 intervals. The Analysis server would select a 1,000 second resolution (2,592 intervals) to provide an adequate level of granularity with an optimal query structure.
 3. Microsoft Active Directory (AD) may now be used as an authentication and authorization source with minimal configuration. I've implemented code that interfaces with AD servers using LDAP/S (or optionally, and highly discouraged, over LDAP). AD servers are identified automatically by leveraging SRV records provided by the DNS server used by the Analysis Server.
-  
   To enable this capability, an administrator need only specify the fully-qualified domain name of the forest root (e.g., "internal.company.com") and the group(s) to authenticate against. Each group can be specified as "privileged" to permit management of the Flower systems themselves.
-  
   No AD user data is stored within the Flower systems and all communication occurs over SSL (unencrypted authentication may be selected, but that option is not exposed yet and would be highly dangerous if not handled properly). Importing the SSL certificate from AD into the GlassFish server is a little tricky, and I'll write up a wiki entry for that soon. Java is very particular about working only with trusted certificates. It is, of course, essential that it be so.
 
 ## Overall Updates
