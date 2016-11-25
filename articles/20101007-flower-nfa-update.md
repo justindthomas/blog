@@ -4,17 +4,17 @@ I've made some significant updates both to the Flower Visualization Server and t
 
 ## Visualization Server
 
-* I implemented changes necessary to support the additional resolutions noted in the Analysis Server section. This is transparent to the end-user (the proper resolution is automatically selected).
+I implemented changes necessary to support the additional resolutions noted in the Analysis Server section. This is transparent to the end-user (the proper resolution is automatically selected).
 
-* New dialog boxes were added to support AD configuration.
+New dialog boxes were added to support AD configuration.
 ![Active Directory Integration](https://ser.endipito.us/file/ad.png)
 
-*  Many, minor aesthetic changes were made to the Network Map output.
+Many, minor aesthetic changes were made to the Network Map output.
 ![Network Map](https://ser.endipito.us/file/networkmap2.png)
 
-* Fonts (@font-face) are used more consistently throughout the workings of the console.
+Fonts (@font-face) are used more consistently throughout the workings of the console.
 
-* The most significant recent changes to the Visualization Server are in the area chart output:
+The most significant recent changes to the Visualization Server are in the area chart output:
 ![Histogram](https://ser.endipito.us/file/histogram-enlarged.png)
   
 I changed the chart from arithmetic to logarithmic because I found that my UDP data was being pushed down to 1 pixel as it was tremendously outweighed by the TCP data. Horizontal scale lines were added to illustrate the fact that the bottom of the graph represents an amount of data many orders of magnitude less than the top of the graph. I also wrote code to insert vertical lines at the beginning of each hour, day and month to better make sense of the data. Here is a 30-day graph shown within it's containing window (data older than a few days is not pictured because I had to reset the database when I implemented the resolution concept):
