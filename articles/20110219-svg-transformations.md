@@ -78,7 +78,7 @@ The basic operations above are:
 
 By way of example, and if you have a newer version of Firefox, Chrome, Safari, Epiphany (or shockingly, even IE9!), visit a [mock-up of a generated network map here](http://justinthomas.name.s3-website-us-east-1.amazonaws.com/). _Author's Note: Now non-operational._ For anyone else, here is a still screenshot of a map that's been twisted, translated and scaled.
  
-![Network Map Mockup](https://ser.endipito.us/files/networkmap.png)
+![Network Map Mockup](https://ser.endipito.us/file/networkmap.png)
  
 If you do visit that page, try using your mouse wheel to rotate the map or the graphical slider to zoom in and out. You can also just drag the map around to reposition it. Clicking on a connection will open a small detail box and clicking on a node will narrow the display to only connections involving that node. Clicking on subsequent nodes will add those nodes' connections. Double clicking in the white space will cause all connections to be visible again. Hovering over a connection or node will show you that connection or node’s details (at the bottom of the graphic). The information in there is mostly nonsense - I went through and sanitized the addresses - although protocol, port and volume information are real.
 
