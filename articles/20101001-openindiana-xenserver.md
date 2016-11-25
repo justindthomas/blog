@@ -22,7 +22,8 @@ xe vm-param-set uuid=<vm uuid> PV-bootloader=
 * Configure basic networking if needed; my Windows 2008 DHCP server never works to assign addresses to OpenSolaris/OpenIndiana (for whatever reason) so this is generally a mandatory step.
 * Connect to the OpenIndiana server with an SSH client with X-tunneling enabled using the jack/jack account.
 * Execute: `pfexec /usr/bin/gui-install`. The graphical install process will begin. Complete the steps as requested.
-* After the installation is completed (and before rebooting), change the PV-args on the XenServer to: 
+
+After the installation is completed (and before rebooting), change the PV-args on the XenServer:
 
 ~~~~ {.bash}
 xe vm-param-set uuid=<vm uuid> PV-args='/platform/i86xpv/kernel/amd64/unix \
