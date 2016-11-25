@@ -22,7 +22,14 @@ xe vm-param-set uuid=<vm uuid> PV-bootloader=
 * Configure basic networking if needed; my Windows 2008 DHCP server never works to assign addresses to OpenSolaris/OpenIndiana (for whatever reason) so this is generally a mandatory step.
 * Connect to the OpenIndiana server with an SSH client with X-tunneling enabled using the jack/jack account.
 * Execute: `pfexec /usr/bin/gui-install`. The graphical install process will begin. Complete the steps as requested.
-* After the installation is completed (and before rebooting), change the PV-args on the XenServer to: `xe vm-param-set uuid=<vm uuid> PV-args='/platform/i86xpv/kernel/amd64/unix -B console=ttya,zfs-bootfs=rpool/ROOT/openindiana,bootpath="/xpvd/xdf@51728:a"'`. Note the two changes from the OpenSolaris instructions from an earlier blog post: the zfs-bootfs is openindiana, not opensolaris and the bootpath is 51728 instead of 51712. I have no idea why the latter change is necessary - I just know that there was no 51712 in my devices directory, only 51728 and a 51760.
+* After the installation is completed (and before rebooting), change the PV-args on the XenServer to: 
+
+~~~~ {.bash}
+xe vm-param-set uuid=<vm uuid> PV-args='/platform/i86xpv/kernel/amd64/unix \
+-B console=ttya,zfs-bootfs=rpool/ROOT/openindiana,bootpath="/xpvd/xdf@51728:a"'
+~~~~
+
+Note the two changes from the OpenSolaris instructions from an earlier blog post: the zfs-bootfs is openindiana, not opensolaris and the bootpath is 51728 instead of 51712. I have no idea why the latter change is necessary - I just know that there was no 51712 in my devices directory, only 51728 and a 51760.
 
 Reboot, and you're good to go! Remember to run `bootadm update-archive` after the first boot (and anytime you make changes that require that file to be updated) and copy out the updated `/platform/i86pc/amd64/boot_archive` to the XenServer before rebooting.
 
