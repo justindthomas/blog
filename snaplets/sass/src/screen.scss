@@ -80,8 +80,6 @@ a {
         width: 100vw;
         text-align: center;
         background: #EBECED;
-        border-top: 1px solid #000;
-        border-bottom: 1px solid #000;
         padding-bottom: 5px;
         
         > a {
@@ -271,12 +269,15 @@ header {
         display: block;
         width: 20%;
         clear: none;
-        padding-left: 2em;
+        padding-left: 1em;
         padding-top: 1em;
         
         h3 {
             padding: 0;
             margin: 0;
+            background: #EBECED;
+            width: 100%;
+            text-align: center;
         }
 
         ul {
