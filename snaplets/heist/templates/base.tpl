@@ -44,5 +44,10 @@
     <div id="content">
       <apply-content/>
     </div>
+    
+    <fb:login-button scope="public_profile,email" onlogin="window.checkLoginState();">
+    </fb:login-button>
+
+    <div id="status">Not connected</div>
   </body>
 </html>

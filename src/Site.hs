@@ -75,6 +75,11 @@ data ArticleMigration = ArticleMigration {
   createdAtM :: ZonedTime
 } deriving Show
 
+data FacebookUserMigration = FacebookUserMigration {
+  userIdM      :: T.Text,
+  userNameM    :: T.Text
+} deriving Show
+
 data StoredFile = StoredFile {
   fileName     :: T.Text,
   fileData     :: ByteString,
@@ -107,6 +112,20 @@ definitions:
         uniques:
           - name: reference_uniq
             fields: [referenceM]
+  - entity: FacebookUserMigration
+    dbName: facebook_user
+    keys:
+      - name: id_uniq
+    constructors:
+      - name: FacebookUserMigration
+        fields:
+          - name: userIdM
+            dbName: user_id
+          - name: userNameM
+            dbName: user_name
+        uniques:
+          - name: id_uniq
+            fields: [userIdM]
   - entity: Article
     dbName: navigation
     constructors:
@@ -170,6 +189,12 @@ getFile = do
   modifyResponse $ setContentType $ B.pack $ T.unpack $ contentType $ f
   writeBS $ fileData $ f
 
+authSession :: AppHandler ()
+authSession = do
+  name <- getParam "name"
+  token <- getParam "token"
+  writeBS $ fromMaybe "" token
+  
 getSingleArticle :: String -> AppHandler Article
 getSingleArticle k = do
   results <- runGH $ select $ (ReferenceField ==. (T.pack k)) `limitTo` 1
@@ -227,6 +252,7 @@ routes = [ ("/", ifTop $ cRender "index")
          , ("/rss", cRenderAs "application/rss+xml" "rss")
          , ("/sass", with sass sassServe)
          , ("/file/:name", getFile)
+         , ("/auth/:name/:token", authSession)
          , ("/favicon.ico", serveFile "static/favicon.ico")
          ]
 
@@ -259,3 +285,4 @@ migrateDB :: (MonadIO m, PersistBackend m) => m ()
 migrateDB = runMigration $ do
   G.migrate (undefined :: ArticleMigration)
   G.migrate (undefined :: StoredFile)
+  G.migrate (undefined :: FacebookUserMigration)
