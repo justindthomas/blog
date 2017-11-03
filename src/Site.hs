@@ -155,7 +155,7 @@ articleSplices :: MonadSnap n => Splices (RuntimeSplice n Article -> C.Splice n)
 articleSplices = mapV (C.pureSplice . C.textSplice) $ do
   "articleReference" ## reference
   "articleTitle"     ## title
-  "articleSummary"   ## summary
+  "articleSummary"   ## markdownToHtml . summary
   "articleContent"   ## markdownToHtml . content
   "articleCreation"  ## presentTime . createdAt
   "articleRss"       ## rssTime . createdAt

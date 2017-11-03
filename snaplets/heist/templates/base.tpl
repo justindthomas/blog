@@ -14,40 +14,19 @@
   <body ontouchstart="">
     <header>
       <p>
-        <img src="/static/logo.png">
         <a href="/">Serendipitous</a>
       </p>
       <p><a href="/pages/about">About</a></p>
     </header>
-    <div id="banner">
-      <div class="logo">
-        <img src="/static/logo.png">
-        <div class="title">
-          <a href="/"><span>Serendipitous</span></a>
-          <span>A public journal by <a href="/pages/about">Justin Thomas</a></span>
-        </div>
+    <div class="banner">
+      <div class="title">
+        <a href="/"><span>Serendipitous</span></a>
+        <span>A public journal by <a href="/pages/about">Justin Thomas</a></span>
       </div>
     </div>
-    <div id="catalog">
-      <h3>Other Articles</h3>
-      <ul>
-        <articles>
-          <a href="/articles/${articleReference}">
-            <li>
-              <p><articleTitle/></p>
-              <p><articleCreation/></p>
-            </li>
-          </a>
-        </articles>
-      </ul>
-    </div>
-    <div id="content">
+
+    <div class="content">
       <apply-content/>
     </div>
-    
-    <fb:login-button scope="public_profile,email" onlogin="window.checkLoginState();">
-    </fb:login-button>
-
-    <div id="status">Not connected</div>
   </body>
 </html>
