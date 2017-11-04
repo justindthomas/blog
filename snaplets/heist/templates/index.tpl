@@ -7,8 +7,9 @@
             <div>
               <p><articleTitle/></p>
               <div><articleSummary/></div>
+              <div class="fader">&nbsp;</div>
             </div>
-            <span>. . .</span>
+            <span>Click to read full article.</span>
             <p><articleCreation/></p>
           </li>
         </a>
