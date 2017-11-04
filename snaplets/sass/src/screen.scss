@@ -236,7 +236,7 @@ div.content {
                 vertical-align: top;
                 border-radius: 5px;
                 border: 1px solid #CACACA;
-
+                
                 > span {
                     width: 100%;
                     font-weight: bold;
@@ -320,6 +320,11 @@ div.content {
         
         a:hover li {
             opacity: 1.0;
+            margin-top: 8px;
+            margin-left: 8px;
+            margin-right: 12px;
+            margin-bottom: 12px;
+            box-shadow: 2px 2px 4px 0px rgba(200,200,200,.75);
         }
 
         a:first-child li {
