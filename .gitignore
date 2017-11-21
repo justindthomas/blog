@@ -13,6 +13,6 @@ media/*
 .sass-cache
 *.map
 static/screen.css
-.local
+.local/bin/blog
 .stack
 snaplets/sass/css
