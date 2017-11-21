@@ -1,3 +1,5 @@
 #!/bin/bash
 
+service postgresql start
+
 cd /srv/blog && /srv/blog/.local/bin/blog -e prod
