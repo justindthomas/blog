@@ -5,24 +5,24 @@ CREATE TABLE "article" (
        "summary" VARCHAR NOT NULL,
        "content" VARCHAR NOT NULL,
        "front_page" BOOLEAN NOT NULL DEFAULT true,
-       "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now())
+       "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now());
 
-ALTER TABLE "article" ADD CONSTRAINT "reference_uniq" UNIQUE("reference")
+ALTER TABLE "article" ADD CONSTRAINT "reference_uniq" UNIQUE("reference");
 
 CREATE TABLE "facebook_user" (
        "id" BIGSERIAL PRIMARY KEY UNIQUE,
        "user_id" VARCHAR NOT NULL,
-       "user_name" VARCHAR NOT NULL)
+       "user_name" VARCHAR NOT NULL);
 
-ALTER TABLE "facebook_user" ADD CONSTRAINT "id_uniq" UNIQUE("user_id")
+ALTER TABLE "facebook_user" ADD CONSTRAINT "id_uniq" UNIQUE("user_id");
 
 CREATE TABLE "files" (
        "id" BIGSERIAL PRIMARY KEY UNIQUE,
        "file_name" VARCHAR NOT NULL,
        "file_data" BYTEA NOT NULL,
-       "content_type" VARCHAR NOT NULL)
+       "content_type" VARCHAR NOT NULL);
 
-ALTER TABLE "files" ADD CONSTRAINT "filename_uniq" UNIQUE("file_name")
+ALTER TABLE "files" ADD CONSTRAINT "filename_uniq" UNIQUE("file_name");
 
 CREATE VIEW navigation AS (
 WITH sub AS (
