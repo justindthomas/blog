@@ -2,7 +2,5 @@
 
 service postgresql start
 
-su -c '/usr/bin/psql blog < /srv/blog/sql/create_nav_view.sql' postgres && \
-
 cd /srv/blog && \
     .local/bin/blog -e prod
