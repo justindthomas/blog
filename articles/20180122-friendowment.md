@@ -20,7 +20,7 @@ One of the interesting challenges I've run up against is one of perception. When
 
 I ran a Facebook advertisement with the initial concept (really, just a brief marketing blurb at https://friendowment.us). It was a very small ad buy (about $50) but out of 1000 impressions it gathered about 50 "likes" and "loves." And only 1 "haha." I don't know what an objective measure of success is for that, but those numbers encouraged me.
 
-Interestingly, folks with names in other character sets (or who's location indicated they were not in the USA) were over-represented. This made me a little sad. But it's not a surprise, right? Americans know that we're individualistic. I'm proposing a bit of a foreign concept. That's okay.
+Interestingly, and despite the fact that I had targeted the advertisement otherwise, folks who's location indicated they were not in the USA were over-represented. This made me a little sad. But it's not a surprise, right? Americans know that we're individualistic. I'm proposing a bit of a foreign concept. That's okay.
 
 ## The Pilot
 
@@ -36,7 +36,7 @@ Testing went well, but that Oauth integration proved to be just too terrible to 
 
 ## The Blockchain
 
-You just read that and silently went, "oh shit, he's lost his damn mind" didn't you? I know, I know. It sounds crazy and I resisted it for a long time. I've long been a cryptocurrency advocate (most recently Zcash), but I've resisted thinking about it for Friendowment. I'm sensitive to the perception that it's a gimmick - I'm not interested in pursuing the fad du jour simply because it's the trend.
+You just read that and silently went, "oh man, he's lost his dang mind" didn't you? I know, I know. It sounds crazy and I resisted it for a long time. I've long been a cryptocurrency advocate (most recently Zcash), but I've resisted thinking about it for Friendowment. I'm sensitive to the perception that it's a gimmick - I'm not interested in pursuing the fad du jour simply because it's the trend.
 
 But the idea of smart contracts with Ethereum stuck with me. I started thinking about how I could build each "endowment" within Friendowment as a smart contract on the Ethereum blockchain. Funds could be transferred from individual Ethereum addresses to the contract address and controls could be implemented in the public blockchain and in my application. And I wouldn't have to deal with any bank-ish institutions directly (other than the obvious fact that folks would need to get their Ether from somewhere like Coinbase).
 
